@@ -15,16 +15,14 @@ class InsertionSorter(Sorter):
         return "Insertion"
 
     def sort(self):
-        double_array = []
-
         i = 1
-        while i < len(double_array):
+        while i < len(self.double_list):
             j = i
 
-            while j > 0 and double_array[j - 1] > double_array[j]:
-                temp_value = double_array[j]
-                double_array[j] = double_array[j - 1]
-                double_array[j - 1] = temp_value
+            while j > 0 and self.double_list[j - 1] > self.double_list[j]:
+                temp_value = self.double_list[j]
+                self.double_list[j] = self.double_list[j - 1]
+                self.double_list[j - 1] = temp_value
                 j -= 1
 
             i += 1

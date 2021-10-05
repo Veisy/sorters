@@ -7,7 +7,7 @@ class Sorter(ABC):
 
     def __init__(self, double_list):
         # The list to be sorted.
-        self.array_list = double_list
+        self.double_list = double_list
 
     @abstractmethod
     def get_algorithm_name(self):
@@ -16,4 +16,3 @@ class Sorter(ABC):
     @abstractmethod
     def sort(self):
         pass
-

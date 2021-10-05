@@ -8,7 +8,7 @@ from merge_sorter import MergeSorter
 
 def sort_analyzer(sorter_object):
     # If array size is bigger then 10 thousand, we can not use Insertion sort anymore.
-    if not (sorter_object.get_algorithm_name == "Insertion" and len(sorter_object.array_list) > 100000):
+    if not (sorter_object.get_algorithm_name == "Insertion" and len(sorter_object.double_list) > 100000):
         start = time.time()
         sorter_object.sort()
         end = time.time()
@@ -71,7 +71,7 @@ while repeat_main:
 
             sorter.sort()
 
-            print(sorter.array_list)
+            print(sorter.double_list)
 
 
 
