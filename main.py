@@ -9,8 +9,9 @@ from bubble_sorter import BubbleSorter
 
 # Function to compare and analyzer algorithms
 def sort_analyzer(sorter_object):
-    # If array size is bigger then 10 thousand, we can not use Insertion sort anymore.
-    if not (sorter_object.get_algorithm_name == "Insertion" and len(sorter_object.double_list) > 100000):
+    # If array size is bigger than 10 thousand, we can not use Insertion and Bubble Sort anymore.
+    if not ((sorter_object.get_algorithm_name == "Insertion" or sorter_object.get_algorithm_name == "Bubble Sort")
+            and len(sorter_object.double_list) > 100000):
         start = time.time()
         sorter_object.sort()
         end = time.time()
@@ -59,7 +60,7 @@ while repeat_main:
             # If we create different random arrays, the execution time did not differ noticeably in this case ,
             # but still it would not be a full comparison.
 
-            # We seed with the same value to all arrays,
+            # We seed with the same value to all Sorter objects,
             # which means all generated random arrays will be same.
             seed(1)
             insertion_sorter = InsertionSorter(rand(array_size))
