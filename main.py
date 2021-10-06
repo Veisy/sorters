@@ -6,6 +6,7 @@ from insertion_sorter import InsertionSorter
 from merge_sorter import MergeSorter
 
 
+# Function to compare and analyzer algorithms
 def sort_analyzer(sorter_object):
     # If array size is bigger then 10 thousand, we can not use Insertion sort anymore.
     if not (sorter_object.get_algorithm_name == "Insertion" and len(sorter_object.double_list) > 100000):
@@ -16,6 +17,24 @@ def sort_analyzer(sorter_object):
         print(sorter_object.get_algorithm_name + " sort execution time: " + str(end - start))
 
 
+# Function to check keyboard input.
+def check_input():
+    keyboard_input = input()
+    while True:
+        try:
+            if keyboard_input == "q":
+                break
+            float(keyboard_input)
+            break
+        except ValueError:
+            print("Please enter a valid number.")
+            keyboard_input = input()
+
+    return keyboard_input
+
+
+# Main menu is opened.
+# Repeat over and over until the repeat_main flag is false.
 repeat_main = True
 while repeat_main:
 
@@ -30,7 +49,8 @@ while repeat_main:
         repeat_main = False
 
     elif operation == str(4):
-        different_array_sizes = [10, 20, 30, 100, 1000, 10000, 100000, 1000000, 10000000]
+        different_array_sizes = [10, 20, 30, 100, 1000, 10000]
+        # 100000, 1000000, 10000000 are removed for now.
 
         for array_size in different_array_sizes:
             # We need to use exactly same array to compare different algorithms
@@ -57,7 +77,7 @@ while repeat_main:
 
             controller = True
             while controller:
-                input_string = input()
+                input_string = check_input()
                 if not input_string == "q":
                     float_input = float(input_string)
                     float_list.append(float_input)
@@ -72,7 +92,3 @@ while repeat_main:
             sorter.sort()
 
             print(sorter.double_list)
-
-
-
-

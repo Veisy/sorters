@@ -15,18 +15,18 @@ class InsertionSorter(Sorter):
         return "Insertion"
 
     def sort(self):
+        InsertionSorter.insertion_sort(self.double_list)
+
+    @staticmethod
+    def insertion_sort(double_list):
         i = 1
-        while i < len(self.double_list):
+        while i < len(double_list):
             j = i
 
-            while j > 0 and self.double_list[j - 1] > self.double_list[j]:
-                temp_value = self.double_list[j]
-                self.double_list[j] = self.double_list[j - 1]
-                self.double_list[j - 1] = temp_value
+            while j > 0 and double_list[j - 1] > double_list[j]:
+                temp_value = double_list[j]
+                double_list[j] = double_list[j - 1]
+                double_list[j - 1] = temp_value
                 j -= 1
 
             i += 1
-
-
-
-
