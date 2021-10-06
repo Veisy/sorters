@@ -18,7 +18,7 @@ class BubbleSorter(Sorter):
     def bubble_sort(double_list):
         length_double_list = len(double_list)
 
-        # Loop through all array elements
+        # Loop through array and compare elements with adjacent elements.
         for i in range(length_double_list):
 
             for j in range(0, length_double_list - i - 1):

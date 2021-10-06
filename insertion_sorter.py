@@ -16,6 +16,7 @@ class InsertionSorter(Sorter):
 
     @staticmethod
     def insertion_sort(double_list):
+        # Start from index 1 and compare values backward, and then jump the next index.
         i = 1
         while i < len(double_list):
             j = i
