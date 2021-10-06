@@ -4,19 +4,22 @@ from insertion_sorter import InsertionSorter
 
 class MergeSorter(Sorter):
 
-    def __init__(self, double_list):
+    def __init__(self, double_list, is_insertion_based=False):
         # Calls parent abstract class constructor (__init__ method).
         super().__init__(double_list)
+        self.is_insertion_based = is_insertion_based
 
     @property
     def get_algorithm_name(self):
-        return "Merge (Fake)"
+        if self.is_insertion_based:
+            return "Merge-Insertion"
+        return "Merge"
 
     def sort(self):
-        self.merge_sort(self.double_list)
+        self.merge_sort(self.double_list, self.is_insertion_based)
 
     @staticmethod
-    def merge_sort(double_list):
+    def merge_sort(double_list, is_insertion_based=False):
         # Length of the array stored. Pre-calculated instead of multiple calls.
         length_double_list = len(double_list)
 
@@ -33,10 +36,13 @@ class MergeSorter(Sorter):
         part_left = double_list[0: midpoint]
         part_right = double_list[midpoint: length_double_list]
 
-        # MergeSorter.merge_sort(part_left)
-        # MergeSorter.merge_sort(part_right)
-        InsertionSorter.insertion_sort(part_left)
-        InsertionSorter.insertion_sort(part_right)
+        if is_insertion_based:
+            InsertionSorter.insertion_sort(part_left)
+            InsertionSorter.insertion_sort(part_right)
+        else:
+            MergeSorter.merge_sort(part_left)
+            MergeSorter.merge_sort(part_right)
+
         MergeSorter.merge(double_list, part_left, part_right)
 
     @staticmethod

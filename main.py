@@ -42,18 +42,19 @@ while repeat_main:
 
     operation = input("\nPlease select the operation you want to do:\n" +
                       "1-)Insertion Sort\n" +
-                      "2-)Merge Sort\n" +
-                      "3-)Bubble Sort\n" +
-                      "4-)Comparison Test\n" +
-                      "5-)Exit\n")
+                      "2-)Merge-Insertion Sort\n" +
+                      "3-)Merge Sort\n" +
+                      "4-)Bubble Sort\n" +
+                      "5-)Comparison Test\n" +
+                      "6-)Exit\n")
 
     # Initially check if user wants to quit.
-    if operation == str(5):
+    if operation == str(6):
         repeat_main = False
 
-    elif operation == str(4):
-        different_array_sizes = [10, 20, 30, 100, 1000, 10000]
-        # 100000, 1000000, 10000000 are removed for now.
+    elif operation == str(5):
+        different_array_sizes = [10, 20, 30, 100, 1000]
+        # 10000, 100000, 1000000, 10000000 are removed for now.
 
         for array_size in different_array_sizes:
             # We need to use exactly same array to compare different algorithms
@@ -64,16 +65,18 @@ while repeat_main:
             # which means all generated random arrays will be same.
             seed(1)
             insertion_sorter = InsertionSorter(rand(array_size))
+            merge_insertion_sorter = MergeSorter(rand(array_size), True)
             merge_sorter = MergeSorter(rand(array_size))
             bubble_sorter = BubbleSorter(rand(array_size))
 
             print("\n\nArray size: " + str(array_size) + "\n")
             sort_analyzer(insertion_sorter)
+            sort_analyzer(merge_insertion_sorter)
             sort_analyzer(merge_sorter)
             sort_analyzer(bubble_sorter)
 
     else:
-        if operation == str(1) or operation == str(2) or operation == str(3):
+        if operation == str(1) or operation == str(2) or operation == str(3) or operation == str(4):
             print("\nPlease enter the value you want to sort:\n" +
                   "Press 'q' to sorting.")
 
@@ -92,6 +95,8 @@ while repeat_main:
             if operation == str(1):
                 sorter = InsertionSorter(float_list)
             elif operation == str(2):
+                sorter = MergeSorter(float_list)
+            elif operation == str(3):
                 sorter = MergeSorter(float_list)
             else:
                 sorter = BubbleSorter(float_list)
