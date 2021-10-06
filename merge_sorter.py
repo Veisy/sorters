@@ -8,9 +8,6 @@ class MergeSorter(Sorter):
         # Calls parent abstract class constructor (__init__ method).
         super().__init__(double_list)
 
-        # The list to be sorted.
-        self.double_list = double_list
-
     @property
     def get_algorithm_name(self):
         return "Merge (Fake)"
@@ -21,20 +18,20 @@ class MergeSorter(Sorter):
     @staticmethod
     def merge_sort(double_list):
         # Length of the array stored. Pre-calculated instead of multiple calls.
-        double_list_length = len(double_list)
+        length_double_list = len(double_list)
 
         # Base condition.
-        if double_list_length < 2:
+        if length_double_list < 2:
             return
 
         # Find the mid index.
-        midpoint = int(double_list_length / 2)
+        midpoint = int(length_double_list / 2)
 
         # create left and right sub arrays
         # mid elements (from index 0 till mid-1) should be part of left sub-array.
         # and (n-mid) elements (from mid to n-1) will be part of right sub-array.
         part_left = double_list[0: midpoint]
-        part_right = double_list[midpoint: double_list_length]
+        part_right = double_list[midpoint: length_double_list]
 
         # MergeSorter.merge_sort(part_left)
         # MergeSorter.merge_sort(part_right)
@@ -45,24 +42,20 @@ class MergeSorter(Sorter):
     @staticmethod
     def merge(double_list, part_left, part_right):
         i, j, k = 0, 0, 0
-        part_left_length = len(part_left)
-        part_right_right = len(part_right)
+        length_part_left, length_part_right = len(part_left), len(part_right)
 
-        while i < part_left_length and j < part_right_right:
+        while i < length_part_left and j < length_part_right:
             if part_left[i] < part_right[j]:
                 double_list[k] = part_left[i]
-                i += 1
+                k, i = (k + 1), (i + 1)
             else:
                 double_list[k] = part_right[j]
-                j += 1
-            k += 1
+                k, j = (k + 1), (j + 1)
 
-        while i < part_left_length:
+        while i < length_part_left:
             double_list[k] = part_left[i]
-            k += 1
-            i += 1
+            k, i = (k + 1), (i + 1)
 
-        while j < part_right_right:
+        while j < length_part_right:
             double_list[k] = part_right[j]
-            k += 1
-            j += 1
+            k, j = (k + 1), (j + 1)

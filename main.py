@@ -4,6 +4,7 @@ from numpy.random import seed
 from numpy.random import rand
 from insertion_sorter import InsertionSorter
 from merge_sorter import MergeSorter
+from bubble_sorter import BubbleSorter
 
 
 # Function to compare and analyzer algorithms
@@ -41,6 +42,7 @@ while repeat_main:
     operation = input("\nPlease select the operation you want to do:\n" +
                       "1-)Insertion Sort\n" +
                       "2-)Merge Sort\n" +
+                      "3-)Bubble Sort\n" +
                       "4-)Comparison Test\n" +
                       "5-)Exit\n")
 
@@ -62,10 +64,12 @@ while repeat_main:
             seed(1)
             insertion_sorter = InsertionSorter(rand(array_size))
             merge_sorter = MergeSorter(rand(array_size))
+            bubble_sorter = BubbleSorter(rand(array_size))
 
             print("\n\nArray size: " + str(array_size) + "\n")
             sort_analyzer(insertion_sorter)
             sort_analyzer(merge_sorter)
+            sort_analyzer(bubble_sorter)
 
     else:
         if operation == str(1) or operation == str(2) or operation == str(3):
@@ -86,8 +90,10 @@ while repeat_main:
 
             if operation == str(1):
                 sorter = InsertionSorter(float_list)
-            else:
+            elif operation == str(2):
                 sorter = MergeSorter(float_list)
+            else:
+                sorter = BubbleSorter(float_list)
 
             sorter.sort()
 
