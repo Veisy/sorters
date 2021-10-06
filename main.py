@@ -7,6 +7,11 @@ from merge_sorter import MergeSorter
 from bubble_sorter import BubbleSorter
 
 
+# NAME: VEYSEL YUSUF YILMAZ, NO: 190403062
+# This is the Homework 1 of Introduction to Algorithms course.
+# Several sorting algorithms are implemented and analyzed in Python.
+# TODO: User Interface implementation.
+
 # Function to compare and analyzer algorithms
 def sort_analyzer(sorter_object):
     # If array size is bigger than 10 thousand, we can not use Insertion and Bubble Sort anymore.
@@ -53,8 +58,8 @@ while repeat_main:
         repeat_main = False
 
     elif operation == str(5):
-        different_array_sizes = [10, 20, 30, 100, 1000]
-        # 10000, 100000, 1000000, 10000000 are removed for now.
+        different_array_sizes = [10, 20, 30, 100, 1000, 10000]
+        # 100000, 1000000, 10000000 are removed for now.
 
         for array_size in different_array_sizes:
             # We need to use exactly same array to compare different algorithms
@@ -95,7 +100,7 @@ while repeat_main:
             if operation == str(1):
                 sorter = InsertionSorter(float_list)
             elif operation == str(2):
-                sorter = MergeSorter(float_list)
+                sorter = MergeSorter(float_list, True)
             elif operation == str(3):
                 sorter = MergeSorter(float_list)
             else:
