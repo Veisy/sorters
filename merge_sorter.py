@@ -4,6 +4,9 @@ from insertion_sorter import InsertionSorter
 
 class MergeSorter(Sorter):
 
+    MERGE_SORT = "Merge"
+    MERGE_INSERTION_SORT = "Merge-Insertion"
+
     def __init__(self, double_list, is_insertion_based=False):
         # Calls parent abstract class constructor (__init__ method).
         super().__init__(double_list)
@@ -12,8 +15,8 @@ class MergeSorter(Sorter):
     @property
     def get_algorithm_name(self):
         if self.is_insertion_based:
-            return "Merge-Insertion"
-        return "Merge"
+            return MergeSorter.MERGE_INSERTION_SORT
+        return MergeSorter.MERGE_SORT
 
     def sort(self):
         self.merge_sort(self.double_list, self.is_insertion_based)

@@ -1,18 +1,25 @@
 import time
 
-from numpy.random import seed
 from numpy.random import rand
+from numpy.random import seed
+
+from bubble_sorter import BubbleSorter
 from insertion_sorter import InsertionSorter
 from merge_sorter import MergeSorter
-from bubble_sorter import BubbleSorter
-
 
 # NAME: VEYSEL YUSUF YILMAZ, NO: 190403062
 # This is the Homework 1 of Introduction to Algorithms course.
 # Several sorting algorithms are implemented and analyzed in Python.
 # TODO: User Interface implementation.
 
-# Function to compare and analyzer algorithms
+# Arrays to store execution times.
+insertion_timing_list = []
+merge_timing_list = []
+merge_insertion_timing_list = []
+bubble_timing_list = []
+
+
+# Function to compare and analyze algorithms
 def sort_analyzer(sorter_object):
     # If array size is bigger than 10 thousand, we can not use Insertion and Bubble Sort anymore.
     if not ((sorter_object.get_algorithm_name == "Insertion" or sorter_object.get_algorithm_name == "Bubble Sort")
@@ -21,7 +28,20 @@ def sort_analyzer(sorter_object):
         sorter_object.sort()
         end = time.time()
 
-        print(sorter_object.get_algorithm_name + " sort execution time: " + str(end - start))
+        execution_time = str(end - start)
+
+        # Store execution times.
+        algorithm_name = sorter_object.get_algorithm_name
+        if algorithm_name == InsertionSorter.INSERTION_SORTER:
+            insertion_timing_list.append(execution_time)
+        elif algorithm_name == MergeSorter.MERGE_INSERTION_SORT:
+            merge_insertion_timing_list.append(execution_time)
+        elif algorithm_name == MergeSorter.MERGE_SORT:
+            merge_timing_list.append(execution_time)
+        elif algorithm_name == BubbleSorter.BUBBLE_SORT:
+            bubble_timing_list.append(execution_time)
+
+        print(sorter_object.get_algorithm_name + " sort execution time: " + execution_time)
 
 
 # Function to check keyboard input.

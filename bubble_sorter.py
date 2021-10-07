@@ -3,13 +3,15 @@ from sorter import Sorter
 
 class BubbleSorter(Sorter):
 
+    BUBBLE_SORT = "Bubble Sort"
+
     def __init__(self, double_list):
         # Calls parent abstract class constructor (__init__ method).
         super().__init__(double_list)
 
     @property
     def get_algorithm_name(self):
-        return "Bubble Sort"
+        return BubbleSorter.BUBBLE_SORT
 
     def sort(self):
         BubbleSorter.bubble_sort(self.double_list)

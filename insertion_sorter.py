@@ -3,13 +3,15 @@ from sorter import Sorter
 
 class InsertionSorter(Sorter):
 
+    INSERTION_SORTER = "Insertion"
+
     def __init__(self, double_list):
         # Calls parent abstract class constructor (__init__ method).
         super().__init__(double_list)
 
     @property
     def get_algorithm_name(self):
-        return "Insertion"
+        return InsertionSorter.INSERTION_SORTER
 
     def sort(self):
         InsertionSorter.insertion_sort(self.double_list)
