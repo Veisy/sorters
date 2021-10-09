@@ -1,5 +1,4 @@
 import time
-from ctypes import *
 
 import matplotlib
 import matplotlib.pyplot as plt
@@ -12,8 +11,6 @@ from sorters import InsertionSorter
 from sorters import MergeSorter
 
 matplotlib.use('TkAgg')
-
-c_merge_sorter = CDLL('./c_sorters.so')
 
 # NAME: VEYSEL YUSUF YILMAZ, NO: 190403062
 # This is the Homework 1 of Introduction to Algorithms course.
