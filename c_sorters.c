@@ -1,13 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
  
  
 //Function declarations. Functions are defined below the main function.
 float *insertion_sort (float A[], int Asize);
-float *merge_insertion_sort(float A[], int Asize)
-void merge_insertion_based(float A[], int Asize);
+float *merge_insertion_sort(float A[], int Asize);
 float *merge_sort(float A[], int Asize);
-void merge_recursive(float A[], int Asize);
+void merge_recursive(float A[], int Asize, bool is_insertion_based);
 void merge(float A[], float L[], float R[], int Asize, int Lsize, int Rsize);
 
 
@@ -37,42 +37,25 @@ float *insertion_sort (float A[], int Asize) {
         }
         i++;
   	}
-  	return A
+  	return A;
 }
 
+
+// Insertion Sort based, hybrid algorithm.
 float *merge_insertion_sort(float A[], int Asize) {
-    merge_insertion_based(A, Asize);
-    return
-}
-
-// Insertion Sort based, hybrid algorithm. 
-void merge_insertion_based(float A[], int Asize) {
-	int mid,i;
-	if(Asize < 2) return; // base condition. If the array has less than two element, do nothing. 
-
-	mid = Asize/2;  // find the mid index.
-	int Lsize = mid;
-	int Rsize = (Asize - mid);
-    
-    float L[Lsize];
-    float R[Rsize];
-	
-	for(i = 0; i < mid; i++) L[i] = A[i]; // creating left subarray
-	for(i = mid; i < Asize; i++) R[i-mid] = A[i]; // creating right subarray
-
-	insertion_sort(L, Lsize);  // sorting the left subarray
-	insertion_sort(R, Rsize);  // sorting the right subarray
-	merge(A, L, R, Asize, Lsize, Rsize);  // Merging L and R into A as sorted list.
+    merge_recursive(A, Asize, true);
+    return A;
 }
 
 
 float *merge_sort(float A[], int Asize) {
-    merge_recursive(A, Asize);
+    merge_recursive(A, Asize, false);
     return A;
 }
 
+
 // Recursive function to sort an array of integers. 
-void merge_recursive(float A[], int Asize) {
+void merge_recursive(float A[], int Asize, bool is_insertion_based) {
 	int mid,i;
 	if(Asize < 2) return; // base condition. If the array has less than two element, do nothing. 
 
@@ -86,10 +69,15 @@ void merge_recursive(float A[], int Asize) {
 	for(i = 0; i < mid; i++) L[i] = A[i]; // creating left subarray
 	for(i = mid; i < Asize; i++) R[i-mid] = A[i]; // creating right subarray
 
-	merge_recursive(L, Lsize);  // sorting the left subarray
-	merge_recursive(R, Rsize);  // sorting the right subarray
-	merge(A, L, R, Asize, Lsize, Rsize);  // Merging L and R into A as sorted list.
+    if (is_insertion_based) {
+        insertion_sort(L, Lsize);  // sorting the left subarray
+	    insertion_sort(R, Rsize);  // sorting the right subarray
+    } else {
+	    merge_recursive(L, Lsize, is_insertion_based);  // sorting the left subarray
+	    merge_recursive(R, Rsize, is_insertion_based);  // sorting the right subarray
+    }
 
+	merge(A, L, R, Asize, Lsize, Rsize);  // Merging L and R into A as sorted list.
 }
 
 
