@@ -33,7 +33,7 @@ def main():
                           "2-)Merge-Insertion Sort\n" +
                           "3-)Merge Sort\n" +
                           "4-)Comparison Test\n" +
-                          "6-)Exit\n")
+                          "5-)Exit\n")
 
         # Initially check if user wants to quit.
         if operation == str(5):
