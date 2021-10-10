@@ -1,7 +1,7 @@
-from sorter import Sorter
+from sorter import BaseSorter
 
 
-class BubbleSorter(Sorter):
+class BubbleSorter(BaseSorter):
 
     BUBBLE_SORT = "Bubble Sort"
 
@@ -14,7 +14,7 @@ class BubbleSorter(Sorter):
         return BubbleSorter.BUBBLE_SORT
 
     def sort(self):
-        BubbleSorter.bubble_sort(self.double_list)
+        BubbleSorter.bubble_sort(self.float_array)
 
     @staticmethod
     def bubble_sort(double_list):
