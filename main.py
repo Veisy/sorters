@@ -89,14 +89,18 @@ while repeat_main:
         repeat_main = False
 
     elif operation == str(5):
-        different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000, 10000]
+        different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000, 2000, 3000, 4000, 5000]
         different_array_sizes_small = np.arange(5, 100, 5)
         different_array_sizes_medium = np.arange(100, 1000, 20)
-        different_array_sizes_large = np.arange(1000, 10100, 100)
+        different_array_sizes_large = np.arange(1000, 5100, 100)
 
         different_array_sizes = np.concatenate([different_array_sizes_small,
                                                 different_array_sizes_medium,
                                                 different_array_sizes_large])
+
+        insertion_timing_list.clear()
+        merge_insertion_timing_list.clear()
+        merge_timing_list.clear()
 
         for array_size in different_array_sizes:
             # We need to use exactly same array to compare different algorithms
