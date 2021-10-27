@@ -9,6 +9,8 @@ c_sorters = CDLL('./c_sorters.so')
 insertion_sort = c_sorters.insertion_sort
 merge_insertion_sort = c_sorters.merge_insertion_sort
 merge_sort = c_sorters.merge_sort
+quick_sort = c_sorters.quick_sort
+heap_sort = c_sorters.heap_sort
 
 
 # Base abstract class of sorting algorithms.
@@ -78,3 +80,44 @@ class MergeSorter(BaseSorter):
             self.float_array = np.array(self.float_array, dtype=c_float)
             merge_sort.restype = ndpointer(dtype=c_float, shape=(array_length,))
             self.float_array = merge_sort(c_void_p(self.float_array.ctypes.data), c_int(array_length))
+
+
+class QuickSorter(BaseSorter):
+    QUICK_SORT = "Quick"
+
+    def __init__(self, float_array):
+        super().__init__(float_array)
+
+    @property
+    def get_algorithm_name(self):
+        return QuickSorter.QUICK_SORT
+
+    def sort(self):
+        array_length = len(self.float_array)
+        # 1- Turn array in to numpy array
+        # 2- Define return types of C function.
+        # 3- Call C function by defining input types, and then return received value.
+        self.float_array = np.array(self.float_array, dtype=c_float)
+        quick_sort.restype = ndpointer(dtype=c_float, shape=(array_length,))
+        self.float_array = quick_sort(c_void_p(self.float_array.ctypes.data), c_int(array_length))
+
+
+class HeapSorter(BaseSorter):
+    HEAP_SORT = "Heap"
+
+    def __init__(self, float_array):
+        super().__init__(float_array)
+
+    @property
+    def get_algorithm_name(self):
+        return HeapSorter.HEAP_SORT
+
+    def sort(self):
+        array_length = len(self.float_array)
+        # 1- Turn array in to numpy array
+        # 2- Define return types of C function.
+        # 3- Call C function by defining input types, and then return received value.
+        self.float_array = np.array(self.float_array, dtype=c_float)
+        heap_sort.restype = ndpointer(dtype=c_float, shape=(array_length,))
+        self.float_array = heap_sort(c_void_p(self.float_array.ctypes.data), c_int(array_length))
+

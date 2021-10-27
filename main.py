@@ -6,8 +6,7 @@ import numpy as np
 from numpy.random import randint
 from numpy.random import seed
 
-from sorters import InsertionSorter
-from sorters import MergeSorter
+from sorters import InsertionSorter, MergeSorter, HeapSorter, QuickSorter
 
 matplotlib.use('TkAgg')
 
@@ -20,6 +19,8 @@ matplotlib.use('TkAgg')
 insertion_timing_list = []
 merge_timing_list = []
 merge_insertion_timing_list = []
+quick_timing_list = []
+heap_timing_list = []
 
 
 def main():
@@ -32,17 +33,19 @@ def main():
                           "1-)Insertion Sort\n" +
                           "2-)Merge-Insertion Sort\n" +
                           "3-)Merge Sort\n" +
-                          "4-)Comparison Test\n" +
-                          "5-)Exit\n")
+                          "4-)Quick Sort\n" +
+                          "5-)Heap Sort\n" +
+                          "6-)Comparison Test\n" +
+                          "7-)Exit\n")
 
         # Initially check if user wants to quit.
-        if operation == str(5):
+        if operation == str(7):
             repeat_main = False
 
-        elif operation == str(4):
+        elif operation == str(6):
             different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000, 2000, 3000, 4000, 5000]
             different_array_sizes_small = np.arange(2, 100, 1)
-            different_array_sizes_medium = np.arange(100, 1000, 20)
+            different_array_sizes_medium = np.arange(100, 2000, 5)
             different_array_sizes_large = np.arange(1000, 5100, 100)
 
             different_array_sizes = np.concatenate([different_array_sizes_small,
@@ -52,6 +55,8 @@ def main():
             insertion_timing_list.clear()
             merge_insertion_timing_list.clear()
             merge_timing_list.clear()
+            quick_timing_list.clear()
+            heap_timing_list.clear()
 
             for array_size in different_array_sizes:
                 # We need to use exactly same array to compare different algorithms
@@ -64,6 +69,8 @@ def main():
                 insertion_sorter = InsertionSorter(randint(1, array_size, array_size))
                 merge_insertion_sorter = MergeSorter(randint(1, array_size, array_size), True)
                 merge_sorter = MergeSorter(randint(1, array_size, array_size))
+                quick_sorter = QuickSorter(randint(1, array_size, array_size))
+                heap_sorter = HeapSorter(randint(1, array_size, array_size))
 
                 # Print the analyze result if the array_size one of the different_array_sizes_print elements.
                 will_be_printed = False
@@ -76,11 +83,15 @@ def main():
                 sort_analyzer(insertion_sorter, will_be_printed)
                 sort_analyzer(merge_insertion_sorter, will_be_printed)
                 sort_analyzer(merge_sorter, will_be_printed)
+                sort_analyzer(quick_sorter, will_be_printed)
+                sort_analyzer(heap_sorter, will_be_printed)
 
             # Plot execution times versus array sizes
             plt.plot(different_array_sizes, insertion_timing_list, label="Insertion Sort")
             plt.plot(different_array_sizes, merge_insertion_timing_list, label="Merge-Insertion Sort")
             plt.plot(different_array_sizes, merge_timing_list, label="Merge Sort")
+            plt.plot(different_array_sizes, quick_timing_list, label="Quick Sort")
+            plt.plot(different_array_sizes, heap_timing_list, label="Heap Sort")
             plt.xlabel('Array sizes')
             plt.ylabel('Execution timings')
             plt.title('Sorter Algorithms Comparison')
@@ -89,7 +100,8 @@ def main():
             plt.show()
 
         else:
-            if operation == str(1) or operation == str(2) or operation == str(3):
+            if operation == str(1) or operation == str(2) or operation == str(3) \
+                    or operation == str(4) or operation == str(5):
                 print("\nPlease enter the value you want to sort:\n" +
                       "Press 'q' to sorting.")
 
@@ -109,8 +121,12 @@ def main():
                     sorter = InsertionSorter(float_array)
                 elif operation == str(2):
                     sorter = MergeSorter(float_array, True)
-                else:
+                elif operation == str(3):
                     sorter = MergeSorter(float_array)
+                elif operation == str(4):
+                    sorter = QuickSorter(float_array)
+                else:
+                    sorter = HeapSorter(float_array)
 
                 sorter.sort()
 
@@ -139,6 +155,10 @@ def sort_analyzer(sorter_object, is_printed):
             merge_insertion_timing_list.append(execution_time)
         elif algorithm_name == MergeSorter.MERGE_SORT:
             merge_timing_list.append(execution_time)
+        elif algorithm_name == QuickSorter.QUICK_SORT:
+            quick_timing_list.append(execution_time)
+        elif algorithm_name == HeapSorter.HEAP_SORT:
+            heap_timing_list.append(execution_time)
 
         if is_printed:
             print(sorter_object.get_algorithm_name + " sort execution time: " + str(execution_time))
