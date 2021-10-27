@@ -7,6 +7,7 @@ from numpy.random import randint
 from numpy.random import seed
 
 from bubble_sorter import BubbleSorter
+from heap_sorter import HeapSorter
 from insertion_sorter import InsertionSorter
 from merge_sorter import MergeSorter
 from quick_sorter import QuickSorter
@@ -24,6 +25,7 @@ merge_timing_list = []
 merge_insertion_timing_list = []
 bubble_timing_list = []
 quick_timing_list = []
+heap_timing_list = []
 
 
 def main():
@@ -38,14 +40,15 @@ def main():
                           "3-)Merge Sort\n" +
                           "4-)Bubble Sort\n" +
                           "5-)Quick Sort\n" +
-                          "6-)Comparison Test\n" +
-                          "7-)Exit\n")
+                          "6-)Heap Sort\n" +
+                          "7-)Comparison Test\n" +
+                          "8-)Exit\n")
 
         # Initially check if user wants to quit.
-        if operation == str(7):
+        if operation == str(8):
             repeat_main = False
 
-        elif operation == str(6):
+        elif operation == str(7):
             different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000]
             different_array_sizes_small = np.arange(2, 100, 1)
             different_array_sizes_medium = np.arange(100, 1050, 50)
@@ -72,6 +75,7 @@ def main():
                 merge_sorter = MergeSorter(randint(1, array_size, array_size))
                 bubble_sorter = BubbleSorter(randint(1, array_size, array_size))
                 quick_sorter = QuickSorter(randint(1, array_size, array_size))
+                heap_sorter = HeapSorter(randint(1, array_size, array_size))
 
                 # Print the analyze result if the array_size one of the different_array_sizes_print elements.
                 will_be_printed = False
@@ -86,6 +90,7 @@ def main():
                 sort_analyzer(merge_sorter, will_be_printed)
                 sort_analyzer(bubble_sorter, will_be_printed)
                 sort_analyzer(quick_sorter, will_be_printed)
+                sort_analyzer(heap_sorter, will_be_printed)
 
             # Plot execution times versus array sizes
             plt.plot(different_array_sizes, bubble_timing_list, label="Bubble Sort")
@@ -93,6 +98,7 @@ def main():
             plt.plot(different_array_sizes, merge_insertion_timing_list, label="Merge-Insertion Sort")
             plt.plot(different_array_sizes, merge_timing_list, label="Merge Sort")
             plt.plot(different_array_sizes, quick_timing_list, label="Quick Sort")
+            plt.plot(different_array_sizes, heap_timing_list, label="Heap Sort")
 
             plt.xlabel('Array sizes')
             plt.ylabel('Execution timings')
@@ -103,7 +109,7 @@ def main():
 
         else:
             if operation == str(1) or operation == str(2) or operation == str(3) \
-                    or operation == str(4) or operation == str(5):
+                    or operation == str(4) or operation == str(5) or operation == str(6):
                 print("\nPlease enter the value you want to sort:\n" +
                       "Press 'q' to sorting.")
 
@@ -128,8 +134,10 @@ def main():
                     sorter = MergeSorter(float_array)
                 elif operation == str(4):
                     sorter = BubbleSorter(float_array)
-                else:
+                elif operation == str(5):
                     sorter = QuickSorter(float_array)
+                else:
+                    sorter = HeapSorter(float_array)
 
                 sorter.sort()
 
@@ -163,6 +171,8 @@ def sort_analyzer(sorter_object, is_printed):
             bubble_timing_list.append(execution_time)
         elif algorithm_name == QuickSorter.QUICK_SORT:
             quick_timing_list.append(execution_time)
+        elif algorithm_name == HeapSorter.HEAP_SORT:
+            heap_timing_list.append(execution_time)
 
         if is_printed:
             print(sorter_object.get_algorithm_name + " sort execution time: " + str(execution_time))
