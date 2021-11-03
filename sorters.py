@@ -17,9 +17,10 @@ heap_sort = c_sorters.heap_sort
 # This class defines methods for child classes.
 class BaseSorter(ABC):
 
-    def __init__(self, float_array):
+    def __init__(self):
         # The list to be sorted.
-        self.float_array = float_array
+        self.float_array = []
+        self.execution_timings = []
 
     @abstractmethod
     def get_algorithm_name(self):
@@ -31,11 +32,7 @@ class BaseSorter(ABC):
 
 
 class InsertionSorter(BaseSorter):
-    INSERTION_SORTER = "Insertion"
-
-    def __init__(self, float_array):
-        # Calls parent abstract class constructor (__init__ method).
-        super().__init__(float_array)
+    INSERTION_SORTER = "Insertion Sort"
 
     @property
     def get_algorithm_name(self):
@@ -52,12 +49,12 @@ class InsertionSorter(BaseSorter):
 
 
 class MergeSorter(BaseSorter):
-    MERGE_SORT = "Merge"
-    MERGE_INSERTION_SORT = "Merge-Insertion"
+    MERGE_SORT = "Merge Sort"
+    MERGE_INSERTION_SORT = "Merge-Insertion Sort"
 
-    def __init__(self, float_array, is_insertion_based=False):
+    def __init__(self, is_insertion_based=False):
         # Calls parent abstract class constructor (__init__ method).
-        super().__init__(float_array)
+        super().__init__()
         self.is_insertion_based = is_insertion_based
 
     @property
@@ -83,10 +80,7 @@ class MergeSorter(BaseSorter):
 
 
 class QuickSorter(BaseSorter):
-    QUICK_SORT = "Quick"
-
-    def __init__(self, float_array):
-        super().__init__(float_array)
+    QUICK_SORT = "Quick Sort"
 
     @property
     def get_algorithm_name(self):
@@ -103,10 +97,7 @@ class QuickSorter(BaseSorter):
 
 
 class HeapSorter(BaseSorter):
-    HEAP_SORT = "Heap"
-
-    def __init__(self, float_array):
-        super().__init__(float_array)
+    HEAP_SORT = "Heap Sort"
 
     @property
     def get_algorithm_name(self):
@@ -120,4 +111,3 @@ class HeapSorter(BaseSorter):
         self.float_array = np.array(self.float_array, dtype=c_float)
         heap_sort.restype = ndpointer(dtype=c_float, shape=(array_length,))
         self.float_array = heap_sort(c_void_p(self.float_array.ctypes.data), c_int(array_length))
-
