@@ -19,14 +19,6 @@ matplotlib.use('TkAgg')
 # Several sorting algorithms are implemented and analyzed in Python.
 # TODO: User Interface implementation.
 
-# Arrays to store execution times.
-insertion_timing_list = []
-merge_timing_list = []
-merge_insertion_timing_list = []
-bubble_timing_list = []
-quick_timing_list = []
-heap_timing_list = []
-
 
 def main():
     # Main menu is opened.
@@ -49,18 +41,23 @@ def main():
             repeat_main = False
 
         elif operation == str(7):
+            # Declare sorter objects.
+            insertion_sorter = InsertionSorter()
+            merge_insertion_sorter = MergeSorter(True)
+            merge_sorter = MergeSorter()
+            bubble_sorter = BubbleSorter()
+            quick_sorter = QuickSorter()
+            heap_sorter = HeapSorter()
+
+            # All sorters objects stored in one array to simplify access and loop.
+            sorters = [insertion_sorter, merge_insertion_sorter, merge_sorter, bubble_sorter, quick_sorter, heap_sorter]
+
             different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000]
             different_array_sizes_small = np.arange(2, 100, 1)
             different_array_sizes_medium = np.arange(100, 1050, 50)
 
             different_array_sizes = np.concatenate([different_array_sizes_small, different_array_sizes_medium])
             # different_array_sizes = different_array_sizes_small
-
-            insertion_timing_list.clear()
-            merge_insertion_timing_list.clear()
-            merge_timing_list.clear()
-            bubble_timing_list.clear()
-            quick_timing_list.clear()
 
             for array_size in different_array_sizes:
                 # We need to use exactly same array to compare different algorithms
@@ -70,13 +67,6 @@ def main():
                 # which means all generated random arrays will be same.
                 seed(1)
 
-                insertion_sorter = InsertionSorter(randint(1, array_size, array_size))
-                merge_insertion_sorter = MergeSorter(randint(1, array_size, array_size), True)
-                merge_sorter = MergeSorter(randint(1, array_size, array_size))
-                bubble_sorter = BubbleSorter(randint(1, array_size, array_size))
-                quick_sorter = QuickSorter(randint(1, array_size, array_size))
-                heap_sorter = HeapSorter(randint(1, array_size, array_size))
-
                 # Print the analyze result if the array_size one of the different_array_sizes_print elements.
                 will_be_printed = False
 
@@ -85,20 +75,13 @@ def main():
                     will_be_printed = True
 
                 # Analyze algorithms.
-                sort_analyzer(insertion_sorter, will_be_printed)
-                sort_analyzer(merge_insertion_sorter, will_be_printed)
-                sort_analyzer(merge_sorter, will_be_printed)
-                sort_analyzer(bubble_sorter, will_be_printed)
-                sort_analyzer(quick_sorter, will_be_printed)
-                sort_analyzer(heap_sorter, will_be_printed)
+                for sorter in sorters:
+                    sorter.float_array = randint(1, array_size, array_size)
+                    sort_analyzer(sorter, will_be_printed)
 
             # Plot execution times versus array sizes
-            plt.plot(different_array_sizes, bubble_timing_list, label="Bubble Sort")
-            plt.plot(different_array_sizes, insertion_timing_list, label="Insertion Sort")
-            plt.plot(different_array_sizes, merge_insertion_timing_list, label="Merge-Insertion Sort")
-            plt.plot(different_array_sizes, merge_timing_list, label="Merge Sort")
-            plt.plot(different_array_sizes, quick_timing_list, label="Quick Sort")
-            plt.plot(different_array_sizes, heap_timing_list, label="Heap Sort")
+            for sorter in sorters:
+                plt.plot(different_array_sizes, sorter.execution_timings, label=sorter.get_algorithm_name)
 
             plt.xlabel('Array sizes')
             plt.ylabel('Execution timings')
@@ -127,18 +110,19 @@ def main():
                         controller = False
 
                 if operation == str(1):
-                    sorter = InsertionSorter(float_array)
+                    sorter = InsertionSorter()
                 elif operation == str(2):
-                    sorter = MergeSorter(float_array, True)
+                    sorter = MergeSorter(True)
                 elif operation == str(3):
-                    sorter = MergeSorter(float_array)
+                    sorter = MergeSorter()
                 elif operation == str(4):
-                    sorter = BubbleSorter(float_array)
+                    sorter = BubbleSorter()
                 elif operation == str(5):
-                    sorter = QuickSorter(float_array)
+                    sorter = QuickSorter()
                 else:
-                    sorter = HeapSorter(float_array)
+                    sorter = HeapSorter()
 
+                sorter.float_array = float_array
                 sorter.sort()
 
                 print(sorter.float_array)
@@ -159,23 +143,11 @@ def sort_analyzer(sorter_object, is_printed):
 
         execution_time = end - start
 
-        # Store execution times.
-        algorithm_name = sorter_object.get_algorithm_name
-        if algorithm_name == InsertionSorter.INSERTION_SORTER:
-            insertion_timing_list.append(execution_time)
-        elif algorithm_name == MergeSorter.MERGE_INSERTION_SORT:
-            merge_insertion_timing_list.append(execution_time)
-        elif algorithm_name == MergeSorter.MERGE_SORT:
-            merge_timing_list.append(execution_time)
-        elif algorithm_name == BubbleSorter.BUBBLE_SORT:
-            bubble_timing_list.append(execution_time)
-        elif algorithm_name == QuickSorter.QUICK_SORT:
-            quick_timing_list.append(execution_time)
-        elif algorithm_name == HeapSorter.HEAP_SORT:
-            heap_timing_list.append(execution_time)
+        # Store execution times, by appending to overall timings pool.
+        sorter_object.execution_timings.append(execution_time)
 
         if is_printed:
-            print(sorter_object.get_algorithm_name + " sort execution time: " + str(execution_time))
+            print(sorter_object.get_algorithm_name + " execution time: " + str(execution_time))
 
 
 # Function to check keyboard input.

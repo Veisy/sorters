@@ -4,12 +4,11 @@ from insertion_sorter import InsertionSorter
 
 class MergeSorter(BaseSorter):
 
-    MERGE_SORT = "Merge"
-    MERGE_INSERTION_SORT = "Merge-Insertion"
+    MERGE_SORT = "Merge Sort"
+    MERGE_INSERTION_SORT = "Merge-Insertion Sort"
 
-    def __init__(self, float_array, is_insertion_based=False):
-        # Calls parent abstract class constructor (__init__ method).
-        super().__init__(float_array)
+    def __init__(self, is_insertion_based=False):
+        super().__init__()
         self.is_insertion_based = is_insertion_based
 
     @property
@@ -19,10 +18,11 @@ class MergeSorter(BaseSorter):
         return MergeSorter.MERGE_SORT
 
     def sort(self):
-        self.merge_sort(self.float_array, self.is_insertion_based)
+        self.__merge_sort(self.float_array, self.is_insertion_based)
 
+    # Double underscore prefix of the method name makes it private.
     @staticmethod
-    def merge_sort(float_array, is_insertion_based=False):
+    def __merge_sort(float_array, is_insertion_based=False):
         # Length of the array stored. Pre-calculated instead of multiple calls.
         length_float_array = len(float_array)
 
@@ -43,13 +43,13 @@ class MergeSorter(BaseSorter):
             InsertionSorter.insertion_sort(part_left)
             InsertionSorter.insertion_sort(part_right)
         else:
-            MergeSorter.merge_sort(part_left)
-            MergeSorter.merge_sort(part_right)
+            MergeSorter.__merge_sort(part_left)
+            MergeSorter.__merge_sort(part_right)
 
-        MergeSorter.merge(float_array, part_left, part_right)
+        MergeSorter.__merge(float_array, part_left, part_right)
 
     @staticmethod
-    def merge(float_array, part_left, part_right):
+    def __merge(float_array, part_left, part_right):
         i, j, k = 0, 0, 0
         length_part_left, length_part_right = len(part_left), len(part_right)
 

@@ -3,11 +3,7 @@ from sorter import BaseSorter
 
 class InsertionSorter(BaseSorter):
 
-    INSERTION_SORTER = "Insertion"
-
-    def __init__(self, float_array):
-        # Calls parent abstract class constructor (__init__ method).
-        super().__init__(float_array)
+    INSERTION_SORTER = "Insertion Sort"
 
     @property
     def get_algorithm_name(self):
