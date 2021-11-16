@@ -11,41 +11,61 @@ from heap_sorter import HeapSorter
 from insertion_sorter import InsertionSorter
 from merge_sorter import MergeSorter
 from quick_sorter import QuickSorter
+from radix_sorter import RadixSorter
 
 matplotlib.use('TkAgg')
-
 
 # NAME: VEYSEL YUSUF YILMAZ, NO: 190403062
 # This is the Homework 1 of Introduction to Algorithms course.
 # Several sorting algorithms are implemented and analyzed in Python.
 # TODO: User Interface implementation.
 
+# Map operations to indexes for managing program flow.
+# Since these constants are used in the whole program,
+# it is better to declare and edit from one place in terms of bug risk and ease.
+INSERTION_INDEX = "1"
+MERGE_INSERTION_INDEX = "2"
+MERGE_INDEX = "3"
+BUBBLE_INDEX = "4"
+QUICK_INDEX = "5"
+HEAP_INDEX = "6"
+RADIX_INDEX = "7"
+SORTER_INDEXES = [INSERTION_INDEX, MERGE_INSERTION_INDEX, MERGE_INDEX,
+                  BUBBLE_INDEX, QUICK_INDEX, HEAP_INDEX, RADIX_INDEX]
+COMPARISON_INDEX = "8"
+EXIT_INDEX = "9"
+
 
 def main():
     # Main menu is opened.
     # Repeat over and over until the repeat_main flag is false.
+
     repeat_main = True
     while repeat_main:
 
         operation = input("\nPlease select the operation you want to do:\n" +
-                          "1-)Insertion Sort\n" +
-                          "2-)Merge-Insertion Sort\n" +
-                          "3-)Merge Sort\n" +
-                          "4-)Bubble Sort\n" +
-                          "5-)Quick Sort\n" +
-                          "6-)Heap Sort\n" +
-                          "7-)Comparison Test\n" +
-                          "8-)Exit\n")
+                          INSERTION_INDEX + "-)Insertion Sort\n" +
+                          MERGE_INSERTION_INDEX + "-)Merge-Insertion Sort\n" +
+                          MERGE_INDEX + "-)Merge Sort\n" +
+                          BUBBLE_INDEX + "-)Bubble Sort\n" +
+                          QUICK_INDEX + "-)Quick Sort\n" +
+                          HEAP_INDEX + "-)Heap Sort\n" +
+                          RADIX_INDEX + "-)Radix Sort\n" +
+                          COMPARISON_INDEX + "-)Comparison Test\n" +
+                          EXIT_INDEX + "-)Exit\n")
 
         # Initially check if user wants to quit.
-        if operation == str(8):
+        if operation == EXIT_INDEX:
             repeat_main = False
 
-        elif operation == str(7):
+        elif operation == COMPARISON_INDEX:
             comparison_test()
 
-        else:
+        elif operation in SORTER_INDEXES:
             manual_entrance(operation)
+
+        else:
+            print("Please enter a valid operation.")
 
 
 def comparison_test():
@@ -56,9 +76,11 @@ def comparison_test():
     bubble_sorter = BubbleSorter()
     quick_sorter = QuickSorter()
     heap_sorter = HeapSorter()
+    radix_sorter = RadixSorter()
 
     # All sorters objects stored in one array to simplify access and loop.
-    sorters = [insertion_sorter, merge_insertion_sorter, merge_sorter, bubble_sorter, quick_sorter, heap_sorter]
+    sorters = [insertion_sorter, merge_insertion_sorter, merge_sorter,
+               bubble_sorter, quick_sorter, heap_sorter, radix_sorter]
 
     different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000]
     different_array_sizes_small = np.arange(2, 100, 1)
@@ -84,7 +106,7 @@ def comparison_test():
 
         # Analyze algorithms.
         for sorter in sorters:
-            sorter.float_array = randint(1, array_size, array_size)
+            sorter.number_array = randint(1, array_size, array_size)
             sort_analyzer(sorter, will_be_printed)
 
     # Plot execution times versus array sizes
@@ -100,51 +122,51 @@ def comparison_test():
 
 
 def manual_entrance(operation):
-    if operation == str(1) or operation == str(2) or operation == str(3) \
-            or operation == str(4) or operation == str(5) or operation == str(6):
-        print("\nPlease enter the value you want to sort:\n" +
-              "Press 'q' to sorting.")
+    print("\nPlease enter the value you want to sort:\n" +
+          "Press 'q' to sorting.")
 
-        # Add numbers in list to sort.
-        float_array = []
+    # Add numbers in list to sort.
+    number_array = []
 
-        # Check if the 'q' key is pressed and receiving inputs is done.
-        controller = True
-        while controller:
-            input_string = check_input()
-            if not input_string == "q":
-                float_input = float(input_string)
-                float_array.append(float_input)
-            else:
-                controller = False
-
-        if operation == str(1):
-            sorter = InsertionSorter()
-        elif operation == str(2):
-            sorter = MergeSorter(True)
-        elif operation == str(3):
-            sorter = MergeSorter()
-        elif operation == str(4):
-            sorter = BubbleSorter()
-        elif operation == str(5):
-            sorter = QuickSorter()
+    # Check if the 'q' key is pressed and receiving inputs is done.
+    controller = True
+    while controller:
+        input_string = check_input()
+        if not input_string == "q":
+            number_input = float(input_string)
+            number_array.append(number_input)
         else:
-            sorter = HeapSorter()
+            controller = False
 
-        sorter.float_array = float_array
-        sorter.sort()
+    if operation == INSERTION_INDEX:
+        sorter = InsertionSorter()
+    elif operation == MERGE_INSERTION_INDEX:
+        sorter = MergeSorter(True)
+    elif operation == MERGE_INDEX:
+        sorter = MergeSorter()
+    elif operation == BUBBLE_INDEX:
+        sorter = BubbleSorter()
+    elif operation == QUICK_INDEX:
+        sorter = QuickSorter()
+    elif operation == HEAP_INDEX:
+        sorter = HeapSorter()
+    else:
+        sorter = RadixSorter()
 
-        print(sorter.float_array)
+    sorter.number_array = number_array
+    sorter.sort()
+
+    print(sorter.number_array)
 
 
 # Function to compare and analyze algorithms
 def sort_analyzer(sorter_object, is_printed):
     # If array size is bigger than 10 thousand, we can not use Insertion and Bubble Sort anymore.
-    if not (((sorter_object.get_algorithm_name == InsertionSorter.INSERTION_SORTER
+    if not (((sorter_object.get_algorithm_name == InsertionSorter.INSERTION_SORT
               or sorter_object.get_algorithm_name == BubbleSorter.BUBBLE_SORT)
-             and len(sorter_object.float_array) > 100000)
+             and len(sorter_object.number_array) > 100000)
             or (sorter_object.get_algorithm_name == MergeSorter.MERGE_INSERTION_SORT
-                and len(sorter_object.float_array) > 200000)):
+                and len(sorter_object.number_array) > 200000)):
 
         start = time.time()
         sorter_object.sort()

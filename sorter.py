@@ -7,7 +7,7 @@ class BaseSorter(ABC):
 
     def __init__(self):
         # The list to be sorted.
-        self.float_array = []
+        self.number_array = []
         self.execution_timings = []
 
     @abstractmethod
