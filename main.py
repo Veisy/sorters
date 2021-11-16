@@ -7,6 +7,7 @@ from numpy.random import randint
 from numpy.random import seed
 
 from bubble_sorter import BubbleSorter
+from counter_sorter import CounterSorter
 from heap_sorter import HeapSorter
 from insertion_sorter import InsertionSorter
 from merge_sorter import MergeSorter
@@ -29,11 +30,12 @@ MERGE_INDEX = "3"
 BUBBLE_INDEX = "4"
 QUICK_INDEX = "5"
 HEAP_INDEX = "6"
-RADIX_INDEX = "7"
+COUNTER_INDEX = "7"
+RADIX_INDEX = "8"
 SORTER_INDEXES = [INSERTION_INDEX, MERGE_INSERTION_INDEX, MERGE_INDEX,
-                  BUBBLE_INDEX, QUICK_INDEX, HEAP_INDEX, RADIX_INDEX]
-COMPARISON_INDEX = "8"
-EXIT_INDEX = "9"
+                  BUBBLE_INDEX, QUICK_INDEX, HEAP_INDEX, COUNTER_INDEX, RADIX_INDEX]
+COMPARISON_INDEX = "9"
+EXIT_INDEX = "0"
 
 
 def main():
@@ -50,6 +52,7 @@ def main():
                           BUBBLE_INDEX + "-)Bubble Sort\n" +
                           QUICK_INDEX + "-)Quick Sort\n" +
                           HEAP_INDEX + "-)Heap Sort\n" +
+                          COUNTER_INDEX + "-)Counter Sort\n" +
                           RADIX_INDEX + "-)Radix Sort\n" +
                           COMPARISON_INDEX + "-)Comparison Test\n" +
                           EXIT_INDEX + "-)Exit\n")
@@ -76,11 +79,12 @@ def comparison_test():
     bubble_sorter = BubbleSorter()
     quick_sorter = QuickSorter()
     heap_sorter = HeapSorter()
+    counter_sorter = CounterSorter()
     radix_sorter = RadixSorter()
 
     # All sorters objects stored in one array to simplify access and loop.
     sorters = [insertion_sorter, merge_insertion_sorter, merge_sorter,
-               bubble_sorter, quick_sorter, heap_sorter, radix_sorter]
+               bubble_sorter, quick_sorter, heap_sorter, counter_sorter, radix_sorter]
 
     different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000]
     different_array_sizes_small = np.arange(2, 100, 1)
@@ -150,6 +154,8 @@ def manual_entrance(operation):
         sorter = QuickSorter()
     elif operation == HEAP_INDEX:
         sorter = HeapSorter()
+    elif operation == COUNTER_INDEX:
+        sorter = CounterSorter()
     else:
         sorter = RadixSorter()
 
