@@ -110,7 +110,7 @@ def comparison_test():
 
         # Analyze algorithms.
         for sorter in sorters:
-            sorter.number_array = randint(1, array_size, array_size)
+            sorter.number_array = randint(1, array_size, array_size).tolist()
             sort_analyzer(sorter, will_be_printed)
 
     # Plot execution times versus array sizes
