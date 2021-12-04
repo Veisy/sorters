@@ -1,31 +1,35 @@
 from abc import ABC
 
-from src.algorithms.sorter import BaseSorter
+from src.algorithms.sorter import Sorter
 
 
-class CounterSorter(BaseSorter, ABC):
-    COUNTER_SORT = "Counter Sort"
+class CountingSorter(Sorter, ABC):
+    COUNTING_SORT = "Counting Sort"
 
     @property
     def get_algorithm_name(self):
-        return CounterSorter.COUNTER_SORT
+        return CountingSorter.COUNTING_SORT
 
     def sort(self):
-        self.number_array = CounterSorter.__counter_sort(self.number_array)
+        self.number_array = self.__counting_sort(self.number_array, self.intermediate_number_arrays, self.is_animating)
+
+        # If NOT animating, we only need sorted array.
+        if not self.is_animating:
+            self.intermediate_number_arrays.append(self.number_array)
 
     @staticmethod
-    def __counter_sort(number_array):
+    def __counting_sort(number_array, intermediate_number_arrays, is_animating):
         # Initialize count array.
-        counter_array_length = CounterSorter.__get_max_number(number_array) + 1
-        count = [0] * counter_array_length
+        counting_array_length = CountingSorter.__get_max_number(number_array) + 1
+        count = [0] * counting_array_length
 
-        # Store the count of each elements in count array
+        # Store the count of each element in count array
         for number in number_array:
             integer_item = int(number)
             count[integer_item] += 1
 
         # Store the cumulative count
-        for i in range(1, counter_array_length):
+        for i in range(1, counting_array_length):
             count[i] += count[i - 1]
 
         # Find the index of each element of the original array in count array
@@ -36,7 +40,12 @@ class CounterSorter(BaseSorter, ABC):
         i = size - 1
         while i >= 0:
             integer_item = int(number_array[i])
+            # Place the element at its position
             output[count[integer_item] - 1] = number_array[i]
+
+            # If animating, collect intermediate arrays
+            Sorter.collectIntermediateArrays(output, intermediate_number_arrays, is_animating)
+
             count[integer_item] -= 1
             i -= 1
 
