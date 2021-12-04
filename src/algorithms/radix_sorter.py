@@ -1,10 +1,9 @@
 from abc import ABC
 from functools import reduce
-from sorter import BaseSorter
+from src.algorithms.sorter import BaseSorter
 
 
 class RadixSorter(BaseSorter, ABC):
-
     RADIX_SORT = "Radix Sort"
 
     @property

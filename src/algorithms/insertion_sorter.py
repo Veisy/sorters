@@ -1,4 +1,4 @@
-from sorter import BaseSorter
+from src.algorithms.sorter import BaseSorter
 
 
 class InsertionSorter(BaseSorter):

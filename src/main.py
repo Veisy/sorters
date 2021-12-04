@@ -6,13 +6,13 @@ import numpy as np
 from numpy.random import randint
 from numpy.random import seed
 
-from bubble_sorter import BubbleSorter
-from counter_sorter import CounterSorter
-from heap_sorter import HeapSorter
-from insertion_sorter import InsertionSorter
-from merge_sorter import MergeSorter
-from quick_sorter import QuickSorter
-from radix_sorter import RadixSorter
+from algorithms.bubble_sorter import BubbleSorter
+from algorithms.counter_sorter import CounterSorter
+from algorithms.heap_sorter import HeapSorter
+from algorithms.insertion_sorter import InsertionSorter
+from algorithms.merge_sorter import MergeSorter
+from algorithms.quick_sorter import QuickSorter
+from algorithms.radix_sorter import RadixSorter
 
 matplotlib.use('TkAgg')
 

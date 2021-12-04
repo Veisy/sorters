@@ -1,6 +1,6 @@
 from abc import ABC
 
-from sorter import BaseSorter
+from src.algorithms.sorter import BaseSorter
 
 
 class CounterSorter(BaseSorter, ABC):

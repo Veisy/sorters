@@ -1,5 +1,5 @@
-from sorter import BaseSorter
-from insertion_sorter import InsertionSorter
+from src.algorithms.sorter import BaseSorter
+from src.algorithms.insertion_sorter import InsertionSorter
 
 
 class MergeSorter(BaseSorter):
