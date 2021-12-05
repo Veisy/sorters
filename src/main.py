@@ -1,7 +1,7 @@
 import matplotlib
 import numpy
 
-from numpy.random import randint
+from numpy.random import randint, seed
 
 from algorithms.bubble_sorter import BubbleSorter
 from algorithms.insertion_sorter import InsertionSorter
@@ -26,8 +26,8 @@ def main():
     # Main menu is opened.
     # Repeat over and over until the repeat_main flag is false.
 
-    sorter = QuickSorter(True)
-
+    sorter = RadixSorter(is_animating=True)
+    seed(1)
     random_array = randint(1, 100, 10)
     sorter.number_array = random_array.tolist()
     sorter.sort()

@@ -9,21 +9,20 @@ class InsertionSorter(Sorter):
         return self.INSERTION_SORT
 
     def sort(self):
-        self.insertion_sort(self.number_array, self.intermediate_number_arrays, self.is_animating)
+        self.insertion_sort()
 
         # If NOT animating, we only need sorted array.
         if not self.is_animating:
             self.intermediate_number_arrays.append(self.number_array)
 
-    @staticmethod
-    def insertion_sort(number_array, intermediate_number_arrays, is_animating):
+    def insertion_sort(self):
         # Start from index 1 and compare values backward, and then jump the next index.
         i = 1
-        while i < len(number_array):
+        while i < len(self.number_array):
             j = i
-            while j > 0 and number_array[j - 1] > number_array[j]:
+            while j > 0 and self.number_array[j - 1] > self.number_array[j]:
                 # Swap and if animating, collect intermediate arrays
-                Sorter.swap(number_array, j, j - 1, intermediate_number_arrays, is_animating)
+                self.swap(j, j - 1)
 
                 j -= 1
             i += 1

@@ -23,16 +23,14 @@ class Sorter(ABC):
         pass
 
     # Used by Bubble, Insertion, Heap and Quick Sorts.
-    @staticmethod
-    def swap(number_array, first_element, second_element, intermediate_number_arrays, is_animating):
-        if number_array[first_element] != number_array[second_element]:
-            number_array[first_element], number_array[second_element] \
-                = number_array[second_element], number_array[first_element]
+    def swap(self, first_element, second_element):
+        if self.number_array[first_element] != self.number_array[second_element]:
+            self.number_array[first_element], self.number_array[second_element] \
+                = self.number_array[second_element], self.number_array[first_element]
 
-        Sorter.collectIntermediateArrays(number_array, intermediate_number_arrays, is_animating)
+        self.collectIntermediateArrays(self.number_array)
 
     # If animating, collect intermediate arrays
-    @staticmethod
-    def collectIntermediateArrays(number_array, intermediate_number_arrays, is_animating):
-        if is_animating:
-            intermediate_number_arrays.append(number_array.copy())
+    def collectIntermediateArrays(self, intermediate_array):
+        if self.is_animating:
+            self.intermediate_number_arrays.append(intermediate_array.copy())

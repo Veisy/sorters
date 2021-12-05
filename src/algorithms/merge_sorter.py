@@ -17,16 +17,14 @@ class MergeSorter(Sorter):
         return self.MERGE_SORT
 
     def sort(self):
-        self.__merge_sort(self.number_array, self.intermediate_number_arrays,
-                          self.is_animating, self.is_insertion_based)
+        self.__merge_sort(self.number_array)
 
         # If NOT animating, we only need sorted array.
         if not self.is_animating:
             self.intermediate_number_arrays.append(self.number_array)
 
     # Double underscore prefix of the method name makes it private.
-    @staticmethod
-    def __merge_sort(number_array, intermediate_number_arrays, is_animating, is_insertion_based=False):
+    def __merge_sort(self, number_array, is_insertion_based=False):
         # Length of the array stored. Pre-calculated instead of multiple calls.
         length_float_array = len(number_array)
 
@@ -44,18 +42,17 @@ class MergeSorter(Sorter):
         part_right = number_array[midpoint: length_float_array]
 
         if is_insertion_based:
-            InsertionSorter.insertion_sort(part_left, intermediate_number_arrays, is_animating)
-            InsertionSorter.insertion_sort(part_right, intermediate_number_arrays, is_animating)
+            InsertionSorter.insertion_sort(part_left)
+            InsertionSorter.insertion_sort(part_right)
         else:
-            MergeSorter.__merge_sort(part_left, intermediate_number_arrays, is_animating)
-            MergeSorter.__merge_sort(part_right, intermediate_number_arrays, is_animating)
+            self.__merge_sort(part_left)
+            self.__merge_sort(part_right)
 
-        Sorter.collectIntermediateArrays(number_array, intermediate_number_arrays, is_animating)
+        self.collectIntermediateArrays(number_array)
 
-        MergeSorter.__merge(number_array, part_left, part_right, intermediate_number_arrays, is_animating)
+        self.__merge(number_array, part_left, part_right)
 
-    @staticmethod
-    def __merge(number_array, part_left, part_right, intermediate_number_arrays, is_animating):
+    def __merge(self, number_array, part_left, part_right):
         i, j, k = 0, 0, 0
         length_part_left, length_part_right = len(part_left), len(part_right)
 
@@ -75,4 +72,4 @@ class MergeSorter(Sorter):
             number_array[k] = part_right[j]
             k, j = (k + 1), (j + 1)
 
-        Sorter.collectIntermediateArrays(number_array, intermediate_number_arrays, is_animating)
+        self.collectIntermediateArrays(number_array)
