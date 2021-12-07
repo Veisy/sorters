@@ -21,11 +21,10 @@ class MainSortingWindow(QMainWindow):
         self.frame_line_2 = QtWidgets.QFrame(self)
 
         self.label = QtWidgets.QLabel(self)
-        self.label_2 = QtWidgets.QLabel(self)
-        self.label_3 = QtWidgets.QLabel(self)
+        self.label_array_size = QtWidgets.QLabel(self)
+        self.label_speed = QtWidgets.QLabel(self)
         self.label_min_value = QtWidgets.QLabel(self)
         self.label_seed_array = QtWidgets.QLabel(self)
-        self.label_multiplier = QtWidgets.QLabel(self)
         self.label_max_value = QtWidgets.QLabel(self)
 
         self.pushButton_return_main_menu = QtWidgets.QPushButton(self)
@@ -36,15 +35,11 @@ class MainSortingWindow(QMainWindow):
 
         self.dial_animation_speed = QtWidgets.QDial(self)
 
-        self.horizontalSlider_multiplier = QtWidgets.QSlider(self)
-
         self.lineEdit_array_size = QtWidgets.QLineEdit(self)
-        self.lineEdit_multiplier = QtWidgets.QLineEdit(self)
         self.lineEdit_max_value = QtWidgets.QLineEdit(self)
         self.lineEdit_min_value = QtWidgets.QLineEdit(self)
 
         self.comboBox_sorting_algorithms = QtWidgets.QComboBox(self)
-        self.checkBox_unique_array = QtWidgets.QCheckBox(self)
         self.checkBox_seed = QtWidgets.QCheckBox(self)
         self.spinBox_seed = QtWidgets.QSpinBox(self)
 
@@ -94,7 +89,6 @@ class MainSortingWindow(QMainWindow):
         self.__set_labels()
         self.__set_buttons()
         self.__set_dials()
-        self.__set_sliders()
         self.__set_line_edits()
         self.__set_combo_boxes()
         self.__set_check_boxes()
@@ -111,16 +105,14 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_create_array.setToolTip(
             _translate("MainSortingWindow", "Create array with above parameters"))
         self.pushButton_create_array.setText(_translate("MainSortingWindow", "Create Array"))
-        self.label_2.setText(_translate("MainSortingWindow", "Array Size"))
+        self.label_array_size.setText(_translate("MainSortingWindow", "Array Size"))
         self.pushButton_clear.setToolTip(_translate("MainSortingWindow", "Clear the fields"))
         self.pushButton_clear.setText(_translate("MainSortingWindow", "Clear"))
         self.pushButton_start_sorting.setToolTip(_translate("MainSortingWindow", "Start sorting animation."))
         self.pushButton_start_sorting.setText(_translate("MainSortingWindow", "SORT"))
-        self.label_3.setText(_translate("MainSortingWindow", " Speed"))
+        self.label_speed.setText(_translate("MainSortingWindow", " Speed"))
         self.pushButton_manuel_array.setToolTip(_translate("MainSortingWindow", "Manual array entrance"))
         self.pushButton_manuel_array.setText(_translate("MainSortingWindow", "Manual Array"))
-        self.checkBox_unique_array.setToolTip(_translate("MainSortingWindow", "Non repeating numbers."))
-        self.checkBox_unique_array.setText(_translate("MainSortingWindow", "Unique Array"))
         self.checkBox_seed.setToolTip(
             _translate("MainWindow_SortingWindow", "Constant array for every parameters."))
         self.checkBox_seed.setText(_translate("MainWindow_SortingWindow", "Seed Array"))
@@ -130,7 +122,6 @@ class MainSortingWindow(QMainWindow):
         self.label_max_value.setText(_translate("MainSortingWindow", "Max Value"))
         self.lineEdit_max_value.setToolTip(_translate("MainSortingWindow", "Enter max value."))
         self.label_seed_array.setText(_translate("MainSortingWindow", "Seed Number "))
-        self.label_multiplier.setText(_translate("MainSortingWindow", "Array\'s Length Multiplier"))
         self.menu_file.setTitle(_translate("MainSortingWindow", "File"))
         self.menu_save.setTitle(_translate("MainSortingWindow", "Save File"))
         self.menu_import.setTitle(_translate("MainSortingWindow", "Import File"))
@@ -198,54 +189,47 @@ class MainSortingWindow(QMainWindow):
                                  "")
         self.label.raise_()
 
-        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_2.setObjectName("label_2")
-        self.label_2.setGeometry(QtCore.QRect(140, 140, 101, 31))
-        self.label_2.setStyleSheet("#label_2{\n"
-                                   "color: " + self.color_text + ";\n"
-                                   "font: 10pt \\\"MV Boli\\\";\n"
-                                   "\n"
-                                   "}")
-        self.label_2.raise_()
+        self.label_array_size.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_array_size.setObjectName("label_2")
+        self.label_array_size.setGeometry(QtCore.QRect(148, 180, 101, 31))
+        self.label_array_size.setStyleSheet("#label_2{\n"
+                                            "color: " + self.color_text + ";\n"
+                                            "font: 11pt \\\"MV Boli\\\";\n"
+                                            "\n"
+                                            "}")
+        self.label_array_size.raise_()
 
-        self.label_3.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_3.setObjectName("label_3")
-        self.label_3.setGeometry(QtCore.QRect(1110, 640, 71, 21))
-        self.label_3.setStyleSheet("#label_3{\n"
-                                   "color: " + self.color_text + ";\n"
-                                   "font: 12pt \\\"MV Boli\\\";\n"
-                                   "\n"
-                                   "}\n"
-                                   "")
-        self.label_3.raise_()
+        self.label_speed.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_speed.setObjectName("label_3")
+        self.label_speed.setGeometry(QtCore.QRect(1110, 640, 71, 21))
+        self.label_speed.setStyleSheet("#label_3{\n"
+                                       "color: " + self.color_text + ";\n"
+                                       "font: 12pt \\\"MV Boli\\\";\n"
+                                       "\n"
+                                       "}\n"
+                                       "")
+        self.label_speed.raise_()
 
         self.label_min_value.setAlignment(QtCore.Qt.AlignCenter)
         self.label_min_value.setObjectName("label_array_range")
-        self.label_min_value.setGeometry(QtCore.QRect(80, 260, 91, 41))
+        self.label_min_value.setGeometry(QtCore.QRect(82, 260, 91, 41))
         self.label_min_value.setStyleSheet("color: " + self.color_text + ";\n"
                                            "font: 11pt \\\"MV Boli\\\";")
         self.label_min_value.raise_()
 
         self.label_max_value.setAlignment(QtCore.Qt.AlignCenter)
         self.label_max_value.setObjectName("label_array_range_2")
-        self.label_max_value.setGeometry(QtCore.QRect(210, 260, 91, 41))
+        self.label_max_value.setGeometry(QtCore.QRect(212, 260, 91, 41))
         self.label_max_value.setStyleSheet("color: " + self.color_text + ";\n"
                                            "font: 11pt \\\"MV Boli\\\";")
         self.label_max_value.raise_()
 
         self.label_seed_array.setAlignment(QtCore.Qt.AlignCenter)
         self.label_seed_array.setObjectName("label_seed_array")
-        self.label_seed_array.setGeometry(QtCore.QRect(120, 340, 151, 41))
+        self.label_seed_array.setGeometry(QtCore.QRect(130, 360, 151, 41))
         self.label_seed_array.setStyleSheet("color: " + self.color_text + ";\n"
                                             "font: 11pt \\\"MV Boli\\\";")
         self.label_seed_array.raise_()
-
-        self.label_multiplier.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_multiplier.setObjectName("label_multiplier")
-        self.label_multiplier.setGeometry(QtCore.QRect(90, 420, 191, 41))
-        self.label_multiplier.setStyleSheet("color: " + self.color_text + ";\n"
-                                            "font: 11pt \\\"MV Boli\\\";")
-        self.label_multiplier.raise_()
 
     def __set_buttons(self):
         self.pushButton_return_main_menu.setGeometry(QtCore.QRect(1190, 10, 51, 51))
@@ -355,27 +339,9 @@ class MainSortingWindow(QMainWindow):
         self.dial_animation_speed.setObjectName("dial_animation_speed")
         self.dial_animation_speed.raise_()
 
-    def __set_sliders(self):
-        self.horizontalSlider_multiplier.setGeometry(QtCore.QRect(110, 460, 160, 22))
-        self.horizontalSlider_multiplier.setStyleSheet("#horizontalSlider_multiplier{\n"
-                                                       "selection-color: " + self.color_slider + ";\n"
-                                                       "\n"
-                                                       "}\n"
-                                                       "\n"
-                                                       "#horizontalSlider_multiplier:pressed{\n"
-                                                       "alternate-background-color: rgb(255, 255, 0);\n"
-                                                       "}")
-        self.horizontalSlider_multiplier.setMinimum(1)
-        self.horizontalSlider_multiplier.setMaximum(10)
-        self.horizontalSlider_multiplier.setPageStep(1)
-        self.horizontalSlider_multiplier.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider_multiplier.setTickPosition(QtWidgets.QSlider.TicksBelow)
-        self.horizontalSlider_multiplier.setObjectName("horizontalSlider_multiplier")
-        self.horizontalSlider_multiplier.raise_()
-
     def __set_line_edits(self):
         self.lineEdit_array_size.setGeometry(QtCore.QRect(160, 220, 81, 41))
-        self.lineEdit_array_size.setValidator(QIntValidator(1, 200))
+        self.lineEdit_array_size.setValidator(QIntValidator(1, 1000, self))
         self.lineEdit_array_size.setStyleSheet("background-color: " + self.color_widget_background + ";\n"
                                                "font: 13pt \"MV Boli\";\n"
                                                "color:" + self.color_text + ";\n"
@@ -409,17 +375,6 @@ class MainSortingWindow(QMainWindow):
         self.lineEdit_max_value.setValidator(QIntValidator(-100000, -100000, self))
         self.lineEdit_max_value.raise_()
 
-        self.lineEdit_multiplier.setGeometry(QtCore.QRect(170, 490, 51, 31))
-        self.lineEdit_multiplier.setStyleSheet("background-color: " + self.color_widget_background + ";\n"
-                                               "font: 13pt \"MV Boli\";\n"
-                                               "color:" + self.color_text + ";\n"
-                                               "border:1px solid " + self.color_border + ";")
-        self.lineEdit_multiplier.setText("")
-        self.lineEdit_multiplier.setAlignment(QtCore.Qt.AlignCenter)
-        self.lineEdit_multiplier.setReadOnly(True)
-        self.lineEdit_multiplier.setObjectName("lineEdit_multiplier")
-        self.lineEdit_multiplier.raise_()
-
     def __set_combo_boxes(self):
         self.comboBox_sorting_algorithms.addItems([BubbleSorter.BUBBLE_SORT, InsertionSorter.INSERTION_SORT,
                                                   MergeSorter.MERGE_INSERTION_SORT, MergeSorter.MERGE_SORT,
@@ -432,24 +387,16 @@ class MainSortingWindow(QMainWindow):
         self.comboBox_sorting_algorithms.raise_()
 
     def __set_check_boxes(self):
-        self.checkBox_unique_array.setGeometry(QtCore.QRect(50, 540, 121, 21))
-        self.checkBox_unique_array.setStyleSheet("#checkBox_unique_array{\n"
-                                                 "font: 11pt \"MV Boli\";\n"
-                                                 "color:" + self.color_text + ";\n"
-                                                 "}")
-        self.checkBox_unique_array.setObjectName("checkBox_unique_array")
-        self.checkBox_unique_array.raise_()
-
         self.checkBox_seed.setGeometry(QtCore.QRect(50, 570, 121, 21))
-        self.checkBox_seed.setStyleSheet("#checkBox_unique_array_2{\n"
+        self.checkBox_seed.setStyleSheet("#checkBox_seed{\n"
                                          "font: 11pt \"MV Boli\";\n"
                                          "color:" + self.color_text + ";\n"
                                          "}")
-        self.checkBox_seed.setObjectName("checkBox_unique_array_2")
+        self.checkBox_seed.setObjectName("checkBox_seed")
         self.checkBox_seed.raise_()
 
     def __set_spin_boxes(self):
-        self.spinBox_seed.setGeometry(QtCore.QRect(150, 380, 81, 31))
+        self.spinBox_seed.setGeometry(QtCore.QRect(160, 400, 81, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.spinBox_seed.setFont(font)
