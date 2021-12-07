@@ -15,6 +15,7 @@ from algorithms.quick_sorter import QuickSorter
 from algorithms.radix_sorter import RadixSorter
 from src.ui.main_sorting_window import MainSortingWindow
 from src.utils.comparison import comparison_test
+from src.utils.is_sorted import is_sorted
 
 matplotlib.use('TkAgg')
 
@@ -29,10 +30,10 @@ input_array = []
 def main():
     # Main menu is opened.
     # Repeat over and over until the repeat_main flag is false.
+    main_window.show()
     set_canvas()
     connect_buttons()
 
-    # animate_sorting(canvas, sorter.intermediate_number_arrays)
     # comparison_test()
 
 
@@ -71,7 +72,7 @@ def create_random_array():
         max_value = int(text_max_value)
     else:
         min_value = 1
-        max_value = 10
+        max_value = 50
 
     input_array.clear()
     random_array = randint(min_value, max_value, size).tolist()
@@ -87,7 +88,7 @@ def clear_input_array():
 
 def clicked_sort(sorting_algorithms):
     # If an array is empty, return without doing anything.
-    if len(input_array) <= 0:
+    if len(input_array) <= 0 or is_sorted(input_array):
         return
 
     selected_algorithm = sorting_algorithms.currentText()
@@ -121,17 +122,23 @@ def sort(sorter):
 def animate_sorting(intermediate_number_arrays):
     print_intermediate_arrays(intermediate_number_arrays)
 
-    for intermediate_array in intermediate_number_arrays:
-        draw(intermediate_array)
+    for index in range(len(intermediate_number_arrays)):
+
+        if index == len(intermediate_number_arrays) - 1:
+            all_bars_color = '#089000'
+        else:
+            all_bars_color = '#3949ab'
+
+        draw(intermediate_number_arrays[index], all_bars_color)
         time.sleep(0.001 * (100 - main_window.dial_animation_speed.value()))
         QApplication.processEvents()
 
 
-def draw(array):
+def draw(array, all_bars_color='#3949ab'):
     canvas = main_window.mpl_sorting_widget.canvas
     canvas.axes.clear()
     canvas.axes.bar(numpy.arange(len(array)),
-                    array, color=['#ffbf00'])
+                    array, color=[all_bars_color])
     canvas.axes.patch.set_alpha(0)
     canvas.draw()
 
@@ -144,8 +151,6 @@ def print_intermediate_arrays(intermediate_number_arrays):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     main_window = MainSortingWindow()
-    main_window.show()
-
     main()
 
     sys.exit(app.exec_())
