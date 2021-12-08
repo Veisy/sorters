@@ -272,7 +272,6 @@ class MainSortingWindow(QMainWindow):
                                            "font: 11pt \\\"MV Boli\\\";")
         self.label_max_value.raise_()
 
-
     def __set_buttons(self):
         self.pushButton_return_main_menu.setGeometry(QtCore.QRect(1190, 10, 51, 51))
         self.pushButton_return_main_menu.setStyleSheet("#pushButton_return_main_menu{\n"
@@ -500,7 +499,12 @@ class MainSortingWindow(QMainWindow):
         self.dial_animation_speed.setStyleSheet("#dial_animation_speed{\n"
                                                 "background-color: " + self.color_slider + ";\n"
                                                 "}")
-        self.dial_animation_speed.setMaximum(100)
+
+        self.dial_animation_speed_max_value = 100
+        dial_max = self.dial_animation_speed_max_value
+
+        self.dial_animation_speed.setMaximum(dial_max)
+        self.dial_animation_speed.setMinimum(5)
         self.dial_animation_speed.setWrapping(True)
         self.dial_animation_speed.setNotchTarget(10.0)
         self.dial_animation_speed.setNotchesVisible(True)
