@@ -21,6 +21,7 @@ class MainSortingWindow(QMainWindow):
         self.frame_line_2 = QtWidgets.QFrame(self)
         self.frame_line_3 = QtWidgets.QFrame(self)
         self.frame_line_4 = QtWidgets.QFrame(self)
+        self.frame_line_5 = QtWidgets.QFrame(self)
 
         self.label = QtWidgets.QLabel(self)
         self.label_array_size = QtWidgets.QLabel(self)
@@ -31,18 +32,23 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_return_main_menu = QtWidgets.QPushButton(self)
         self.pushButton_create_array = QtWidgets.QPushButton(self)
         self.pushButton_manuel_array = QtWidgets.QPushButton(self)
+        self.pushButton_fibonacci = QtWidgets.QPushButton(self)
         self.pushButton_clear = QtWidgets.QPushButton(self)
         self.pushButton_start_sorting = QtWidgets.QPushButton(self)
         self.pushButton_compare = QtWidgets.QPushButton(self)
         self.pushButton_pause = QtWidgets.QPushButton(self)
         self.pushButton_stop = QtWidgets.QPushButton(self)
         self.pushButton_resume = QtWidgets.QPushButton(self)
+        self.pushButton_back = QtWidgets.QPushButton(self)
+        self.pushButton_search = QtWidgets.QPushButton(self)
 
         self.dial_animation_speed = QtWidgets.QDial(self)
 
         self.lineEdit_array_size = QtWidgets.QLineEdit(self)
         self.lineEdit_max_value = QtWidgets.QLineEdit(self)
         self.lineEdit_min_value = QtWidgets.QLineEdit(self)
+        self.lineEdit_search = QtWidgets.QLineEdit(self)
+        self.lineEdit_fibonacci = QtWidgets.QLineEdit(self)
 
         self.comboBox_sorting_algorithms = QtWidgets.QComboBox(self)
         self.checkBox_seed = QtWidgets.QCheckBox(self)
@@ -67,6 +73,7 @@ class MainSortingWindow(QMainWindow):
         self.color_primary_dark = None
         self.color_secondary = None
         self.color_secondary_light = None
+        self.color_complementary = None
         self.color_text = None
         self.color_widget_background = None
         self.color_text_button = None
@@ -126,12 +133,18 @@ class MainSortingWindow(QMainWindow):
         self.lineEdit_min_value.setToolTip(_translate("MainSortingWindow", "Enter min value."))
         self.label_max_value.setText(_translate("MainSortingWindow", "Max Value"))
         self.lineEdit_max_value.setToolTip(_translate("MainSortingWindow", "Enter max value."))
+        self.pushButton_search.setText(_translate("MainSortingWindow", "Search"))
+        self.pushButton_search.setToolTip(_translate("MainSortingWindow", "Search in array."))
+        self.pushButton_fibonacci.setText(_translate("MainSortingWindow", "Fibonacci"))
+        self.pushButton_fibonacci.setToolTip(_translate("MainSortingWindow", "Create fibonacci sequence."))
         self.pushButton_pause.setText(_translate("MainSortingWindow", "Pause"))
         self.pushButton_pause.setToolTip(_translate("MainSortingWindow", "Pause animation."))
         self.pushButton_resume.setText(_translate("MainSortingWindow", "Resume"))
         self.pushButton_resume.setToolTip(_translate("MainSortingWindow", "Resume animation."))
         self.pushButton_stop.setText(_translate("MainSortingWindow", "Stop"))
         self.pushButton_resume.setToolTip(_translate("MainSortingWindow", "Stop animation."))
+        self.pushButton_back.setText(_translate("MainSortingWindow", "Back"))
+        self.pushButton_back.setToolTip(_translate("MainSortingWindow", "Show previous sorting step."))
         self.menu_file.setTitle(_translate("MainSortingWindow", "File"))
         self.menu_save.setTitle(_translate("MainSortingWindow", "Save File"))
         self.menu_import.setTitle(_translate("MainSortingWindow", "Import File"))
@@ -153,6 +166,8 @@ class MainSortingWindow(QMainWindow):
         self.color_positive_background_hover = '#089000'
         self.color_neutral_background = '#3949ab'
         self.color_neutral_background_hover = '#6f74dd'
+
+        self.color_complementary = '#796e01'
 
         self.color_text = self.color_secondary
         self.color_widget_background = self.color_primary
@@ -204,6 +219,12 @@ class MainSortingWindow(QMainWindow):
         self.frame_line_4.setObjectName("frame_line_4")
         self.frame_line_4.raise_()
 
+        self.frame_line_5.setGeometry(QtCore.QRect(870, 600, 20, 200))
+        self.frame_line_5.setFrameShape(QtWidgets.QFrame.VLine)
+        self.frame_line_5.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame_line_5.setObjectName("frame_line_5")
+        self.frame_line_5.raise_()
+
     def __set_labels(self):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
@@ -250,6 +271,7 @@ class MainSortingWindow(QMainWindow):
         self.label_max_value.setStyleSheet("color: " + self.color_text + ";\n"
                                            "font: 11pt \\\"MV Boli\\\";")
         self.label_max_value.raise_()
+
 
     def __set_buttons(self):
         self.pushButton_return_main_menu.setGeometry(QtCore.QRect(1190, 10, 51, 51))
@@ -307,6 +329,24 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_manuel_array.setObjectName("pushButton_manuel_array")
         self.pushButton_manuel_array.raise_()
 
+        self.pushButton_fibonacci.setGeometry(QtCore.QRect(910, 685, 80, 40))
+        self.pushButton_fibonacci.setMinimumSize(QtCore.QSize(30, 40))
+        self.pushButton_fibonacci.setMaximumSize(QtCore.QSize(130, 40))
+        self.pushButton_fibonacci.setStyleSheet("#pushButton_fibonacci{\n"
+                                                "background-color: " + self.color_button_background + ";\n"
+                                                "font: 11pt MV Boli;\n"
+                                                "color:" + self.color_text_button + ";\n"
+                                                "border:1px solid " + self.color_border + ";\n"
+                                                "border-radius:20px;\n"
+                                                "}\n"
+                                                "#pushButton_fibonacci:hover{\n"
+                                                "background-color: " + self.color_button_background_hover + ";\n"
+                                                "    color: " + self.color_text_button_hover + ";\n"
+                                                "\n"
+                                                "}")
+        self.pushButton_fibonacci.setObjectName("pushButton_fibonacci")
+        self.pushButton_fibonacci.raise_()
+
         self.pushButton_clear.setGeometry(QtCore.QRect(385, 720, 130, 40))
         self.pushButton_clear.setMinimumSize(QtCore.QSize(30, 40))
         self.pushButton_clear.setMaximumSize(QtCore.QSize(100, 40))
@@ -361,7 +401,7 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_compare.setObjectName("pushButton_compare")
         self.pushButton_compare.raise_()
 
-        self.pushButton_pause.setGeometry(QtCore.QRect(550, 450, 80, 40))
+        self.pushButton_pause.setGeometry(QtCore.QRect(450, 450, 80, 40))
         self.pushButton_pause.setMinimumSize(QtCore.QSize(80, 40))
         self.pushButton_pause.setMaximumSize(QtCore.QSize(160, 40))
         self.pushButton_pause.setStyleSheet("#pushButton_pause{\n"
@@ -380,7 +420,7 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_pause.setVisible(False)
         self.pushButton_pause.raise_()
 
-        self.pushButton_resume.setGeometry(QtCore.QRect(650, 450, 80, 40))
+        self.pushButton_resume.setGeometry(QtCore.QRect(550, 450, 80, 40))
         self.pushButton_resume.setMinimumSize(QtCore.QSize(80, 40))
         self.pushButton_resume.setMaximumSize(QtCore.QSize(160, 40))
         self.pushButton_resume.setStyleSheet("#pushButton_resume{\n"
@@ -399,11 +439,11 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_resume.setVisible(False)
         self.pushButton_resume.raise_()
 
-        self.pushButton_stop.setGeometry(QtCore.QRect(450, 450, 80, 40))
+        self.pushButton_stop.setGeometry(QtCore.QRect(650, 450, 80, 40))
         self.pushButton_stop.setMinimumSize(QtCore.QSize(80, 40))
         self.pushButton_stop.setMaximumSize(QtCore.QSize(160, 40))
         self.pushButton_stop.setStyleSheet("#pushButton_stop{\n"
-                                           "background-color: " + self.color_button_background + ";\n"
+                                           "background-color: " + self.color_warning_background + ";\n"
                                            "font: 11pt MV Boli;\n"
                                            "color:" + self.color_text_button + ";\n"
                                            "border:1px solid " + self.color_border + ";\n"
@@ -417,6 +457,43 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_stop.setObjectName("pushButton_stop")
         self.pushButton_stop.setVisible(False)
         self.pushButton_stop.raise_()
+
+        self.pushButton_back.setGeometry(QtCore.QRect(350, 450, 80, 40))
+        self.pushButton_back.setMinimumSize(QtCore.QSize(80, 40))
+        self.pushButton_back.setMaximumSize(QtCore.QSize(160, 40))
+        self.pushButton_back.setStyleSheet("#pushButton_back{\n"
+                                           "background-color: " + self.color_button_background + ";\n"
+                                           "font: 11pt MV Boli;\n"
+                                           "color:" + self.color_text_button + ";\n"
+                                           "border:1px solid " + self.color_border + ";\n"
+                                           "border-radius:20px;\n"
+                                           "}\n"
+                                           "#pushButton_back:hover{\n"
+                                           "background-color: " + self.color_button_background_hover + ";\n"
+                                           "    color: " + self.color_text_button_hover + ";\n"
+                                           "\n"
+                                           "}")
+        self.pushButton_back.setObjectName("pushButton_back")
+        self.pushButton_back.setVisible(False)
+        self.pushButton_back.raise_()
+
+        self.pushButton_search.setGeometry(QtCore.QRect(770, 685, 80, 40))
+        self.pushButton_search.setMinimumSize(QtCore.QSize(80, 40))
+        self.pushButton_search.setMaximumSize(QtCore.QSize(160, 40))
+        self.pushButton_search.setStyleSheet("#pushButton_search{\n"
+                                             "background-color: " + self.color_button_background + ";\n"
+                                             "font: 11pt MV Boli;\n"
+                                             "color:" + self.color_text_button + ";\n"
+                                             "border:1px solid " + self.color_border + ";\n"
+                                             "border-radius:20px;\n"
+                                             "}\n"
+                                             "#pushButton_search:hover{\n"
+                                             "background-color: " + self.color_button_background_hover + ";\n"
+                                             "    color: " + self.color_text_button_hover + ";\n"
+                                             "\n"
+                                             "}")
+        self.pushButton_search.setObjectName("pushButton_search")
+        self.pushButton_search.raise_()
 
     def __set_dials(self):
         self.dial_animation_speed.setGeometry(QtCore.QRect(770, 430, 121, 121))
@@ -452,7 +529,7 @@ class MainSortingWindow(QMainWindow):
                                               "}")
         self.lineEdit_min_value.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_min_value.setObjectName("lineEdit_min_value")
-        self.lineEdit_min_value.setValidator(QIntValidator(-100000, -100000, self))
+        self.lineEdit_min_value.setValidator(QIntValidator(-100000, 100000, self))
         self.lineEdit_min_value.raise_()
 
         self.lineEdit_max_value.setGeometry(QtCore.QRect(210, 630, 81, 41))
@@ -464,8 +541,32 @@ class MainSortingWindow(QMainWindow):
                                               "}")
         self.lineEdit_max_value.setAlignment(QtCore.Qt.AlignCenter)
         self.lineEdit_max_value.setObjectName("lineEdit_max_value")
-        self.lineEdit_max_value.setValidator(QIntValidator(-100000, -100000, self))
+        self.lineEdit_max_value.setValidator(QIntValidator(-100000, 100000, self))
         self.lineEdit_max_value.raise_()
+
+        self.lineEdit_search.setGeometry(QtCore.QRect(770, 630, 81, 41))
+        self.lineEdit_search.setStyleSheet("#lineEdit_search{\n"
+                                           "background-color: " + self.color_widget_background + ";\n"
+                                           "font: 12pt  MV Boli;\n"
+                                           "color:" + self.color_text + ";\n"
+                                           "border:1px solid " + self.color_border + ";\n"
+                                           "}")
+        self.lineEdit_search.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_search.setObjectName("lineEdit_search")
+        self.lineEdit_search.setValidator(QIntValidator(-100000, 100000, self))
+        self.lineEdit_search.raise_()
+
+        self.lineEdit_fibonacci.setGeometry(QtCore.QRect(910, 630, 81, 41))
+        self.lineEdit_fibonacci.setStyleSheet("#lineEdit_fibonacci{\n"
+                                              "background-color: " + self.color_widget_background + ";\n"
+                                              "font: 12pt  MV Boli;\n"
+                                              "color:" + self.color_text + ";\n"
+                                              "border:1px solid " + self.color_border + ";\n"
+                                              "}")
+        self.lineEdit_fibonacci.setAlignment(QtCore.Qt.AlignCenter)
+        self.lineEdit_fibonacci.setObjectName("lineEdit_fibonacci")
+        self.lineEdit_fibonacci.setValidator(QIntValidator(2, 20, self))
+        self.lineEdit_fibonacci.raise_()
 
     def __set_combo_boxes(self):
         self.comboBox_sorting_algorithms.addItems([BubbleSorter.BUBBLE_SORT, InsertionSorter.INSERTION_SORT,

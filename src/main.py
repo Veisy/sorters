@@ -1,3 +1,4 @@
+import random
 import sys
 import time
 
@@ -15,7 +16,9 @@ from algorithms.quick_sorter import QuickSorter
 from algorithms.radix_sorter import RadixSorter
 from src.ui.main_sorting_window import MainSortingWindow
 from src.utils.comparison import comparison_test
+from src.utils.fibonacci_generator import generate_fibonacci
 from src.utils.is_sorted import is_sorted
+from src.utils.searchers import linear_search
 
 matplotlib.use('TkAgg')
 
@@ -48,12 +51,16 @@ def set_canvas():
 def connect_buttons():
     main_window.pushButton_start_sorting.clicked.connect(lambda: clicked_sort(main_window.comboBox_sorting_algorithms))
     main_window.pushButton_create_array.clicked.connect(create_random_array)
+    # main_window.pushButton_manuel_array.clicked.connect(add_manual_element)
+    main_window.pushButton_fibonacci.clicked.connect(create_fibonacci_array)
     main_window.pushButton_clear.clicked.connect(clear_input_array)
     main_window.checkBox_seed.stateChanged.connect(set_seed_visibility)
     main_window.pushButton_compare.clicked.connect(compare_algorithms)
+    main_window.pushButton_search.clicked.connect(search)
     main_window.pushButton_pause.clicked.connect(pause_animation)
     main_window.pushButton_resume.clicked.connect(resume_animation)
     main_window.pushButton_stop.clicked.connect(stop_animation)
+    main_window.pushButton_back.clicked.connect(back)
 
 
 # Create random array with default parameters.
@@ -92,6 +99,24 @@ def create_random_array():
     input_array.extend(random_array)
     draw(random_array)
     print(str(input_array))
+
+
+# def add_manual_element():
+#     if main_window.line
+
+
+def create_fibonacci_array():
+    text_fibonacci_size = main_window.lineEdit_fibonacci.text()
+
+    if text_fibonacci_size != '' and 20 > int(text_fibonacci_size) > 1:
+        fibonacci_size = int(text_fibonacci_size)
+    else:
+        fibonacci_size = 15
+    fibonacci_sequence = generate_fibonacci(fibonacci_size)
+    input_array.clear()
+    input_array.extend(fibonacci_sequence)
+    random.shuffle(input_array)
+    draw(input_array)
 
 
 def clear_input_array():
@@ -165,7 +190,11 @@ def animate_sorting():
         else:
             default_bar_color = str(main_window.color_neutral_background)
 
-        draw(list_of_intermediate_number_arrays[current_index], default_bar_color)
+        if current_index > 0:
+            paint_different_elements(list_of_intermediate_number_arrays[current_index - 1],
+                                     list_of_intermediate_number_arrays[current_index])
+        else:
+            draw(list_of_intermediate_number_arrays[current_index], default_bar_color)
 
         current_index += 1
 
@@ -173,30 +202,45 @@ def animate_sorting():
         QApplication.processEvents()
 
     is_animation_active = False
+    set_seed_visibility()
 
 
-def draw(array, all_bars_color='#3949ab'):
+def draw(array, all_bars_color='#3949ab', highlighted_bar_indexes=None, highlight=False):
     canvas = set_canvas()
     canvas.axes.clear()
     canvas.axes.bar(numpy.arange(len(array)),
                     array, color=[all_bars_color])
+    if highlight and len(highlighted_bar_indexes) > 0:
+        for index in highlighted_bar_indexes:
+            canvas.axes.bar(numpy.arange(len(array))[index],
+                            array[index], color=main_window.color_complementary)
+
     canvas.axes.patch.set_alpha(0)
     canvas.draw()
 
 
 def compare_algorithms():
-    array_dependent_views_visibility(False)
-
     canvas = main_window.mpl_sorting_widget.canvas
     canvas.axes.clear()
     comparison_test(canvas)
 
-    array_dependent_views_visibility(True)
+
+def search():
+    global input_array
+
+    if len(input_array) > 0:
+        element = main_window.lineEdit_search.text()
+
+        if element != '':
+            index = linear_search(input_array.copy(), int(element))
+            draw(input_array.copy(), highlight=True, highlighted_bar_indexes=[index])
 
 
 def pause_animation():
     global is_animation_active
+    global current_index
     is_animation_active = False
+    current_index -= 1
 
 
 def resume_animation():
@@ -213,35 +257,53 @@ def stop_animation():
     draw(input_array)
 
 
+def back():
+    global list_of_intermediate_number_arrays
+    global current_index
+    global is_animation_active
+    if is_animation_active:
+        pause_animation()
+    current_index -= 1
+    if current_index < 0:
+        stop_animation()
+
+    if current_index > 1:
+        paint_different_elements(list_of_intermediate_number_arrays[current_index],
+                                 list_of_intermediate_number_arrays[current_index - 1])
+
+
 def toggle_views_visibility(is_visible):
-    array_dependent_views_visibility(is_visible)
-    pause_stop_resume_back_buttons_visibility(not is_visible)
-
-
-def array_dependent_views_visibility(is_visible):
     array_independent_views = [main_window.pushButton_start_sorting, main_window.pushButton_compare,
                                main_window.comboBox_sorting_algorithms, main_window.menuBar,
                                main_window.pushButton_create_array, main_window.pushButton_manuel_array,
                                main_window.pushButton_clear, main_window.lineEdit_array_size,
                                main_window.lineEdit_max_value, main_window.lineEdit_min_value,
                                main_window.label_array_size, main_window.label_max_value,
-                               main_window.label_min_value, main_window.spinBox_seed, main_window.checkBox_seed]
+                               main_window.label_min_value, main_window.lineEdit_search, main_window.pushButton_search,
+                               main_window.checkBox_seed, main_window.spinBox_seed]
     for view in array_independent_views:
         if is_visible:
             view.setVisible(True)
         else:
             view.setVisible(False)
 
-
-def pause_stop_resume_back_buttons_visibility(is_visible):
     pause_stop_resume_back_buttons = [main_window.pushButton_pause, main_window.pushButton_resume,
-                                      main_window.pushButton_stop, main_window.label_speed,
-                                      main_window.dial_animation_speed]
+                                      main_window.pushButton_stop, main_window.pushButton_back,
+                                      main_window.label_speed, main_window.dial_animation_speed]
     for view in pause_stop_resume_back_buttons:
         if is_visible:
-            view.setVisible(True)
-        else:
             view.setVisible(False)
+        else:
+            view.setVisible(True)
+
+
+def paint_different_elements(first_array, second_array):
+    different_element_indexes = []
+    if len(first_array) == len(second_array):
+        for index in range(len(first_array)):
+            if first_array[index] != second_array[index]:
+                different_element_indexes.append(index)
+    draw(second_array, highlight=True, highlighted_bar_indexes=different_element_indexes)
 
 
 def set_seed_visibility():
