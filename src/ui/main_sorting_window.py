@@ -19,12 +19,13 @@ class MainSortingWindow(QMainWindow):
         # Initialize widgets.
         self.frame_line = QtWidgets.QFrame(self)
         self.frame_line_2 = QtWidgets.QFrame(self)
+        self.frame_line_3 = QtWidgets.QFrame(self)
+        self.frame_line_4 = QtWidgets.QFrame(self)
 
         self.label = QtWidgets.QLabel(self)
         self.label_array_size = QtWidgets.QLabel(self)
         self.label_speed = QtWidgets.QLabel(self)
         self.label_min_value = QtWidgets.QLabel(self)
-        self.label_seed_array = QtWidgets.QLabel(self)
         self.label_max_value = QtWidgets.QLabel(self)
 
         self.pushButton_return_main_menu = QtWidgets.QPushButton(self)
@@ -32,6 +33,10 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_manuel_array = QtWidgets.QPushButton(self)
         self.pushButton_clear = QtWidgets.QPushButton(self)
         self.pushButton_start_sorting = QtWidgets.QPushButton(self)
+        self.pushButton_compare = QtWidgets.QPushButton(self)
+        self.pushButton_pause = QtWidgets.QPushButton(self)
+        self.pushButton_stop = QtWidgets.QPushButton(self)
+        self.pushButton_resume = QtWidgets.QPushButton(self)
 
         self.dial_animation_speed = QtWidgets.QDial(self)
 
@@ -42,12 +47,6 @@ class MainSortingWindow(QMainWindow):
         self.comboBox_sorting_algorithms = QtWidgets.QComboBox(self)
         self.checkBox_seed = QtWidgets.QCheckBox(self)
         self.spinBox_seed = QtWidgets.QSpinBox(self)
-
-        self.icon1 = QtGui.QIcon()
-        self.icon2 = QtGui.QIcon()
-        self.icon3 = QtGui.QIcon()
-        self.icon4 = QtGui.QIcon()
-        self.icon5 = QtGui.QIcon()
 
         self.action_xlsx = QtWidgets.QAction(self)
         self.action_csv = QtWidgets.QAction(self)
@@ -77,6 +76,10 @@ class MainSortingWindow(QMainWindow):
         self.color_text_button_hover = None
         self.color_slider = None
         self.color_warning_background = None
+        self.color_positive_background = None
+        self.color_positive_background_hover = None
+        self.color_neutral_background = None
+        self.color_neutral_background_hover = None
 
         # Setup widget properties.
         self.setupUi()
@@ -110,6 +113,8 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_clear.setText(_translate("MainSortingWindow", "Clear"))
         self.pushButton_start_sorting.setToolTip(_translate("MainSortingWindow", "Start sorting animation."))
         self.pushButton_start_sorting.setText(_translate("MainSortingWindow", "SORT"))
+        self.pushButton_compare.setToolTip(_translate("MainSortingWindow", "Compare sorting algorithms."))
+        self.pushButton_compare.setText(_translate("MainSortingWindow", "COMPARE"))
         self.label_speed.setText(_translate("MainSortingWindow", " Speed"))
         self.pushButton_manuel_array.setToolTip(_translate("MainSortingWindow", "Manual array entrance"))
         self.pushButton_manuel_array.setText(_translate("MainSortingWindow", "Manual Array"))
@@ -121,7 +126,12 @@ class MainSortingWindow(QMainWindow):
         self.lineEdit_min_value.setToolTip(_translate("MainSortingWindow", "Enter min value."))
         self.label_max_value.setText(_translate("MainSortingWindow", "Max Value"))
         self.lineEdit_max_value.setToolTip(_translate("MainSortingWindow", "Enter max value."))
-        self.label_seed_array.setText(_translate("MainSortingWindow", "Seed Number "))
+        self.pushButton_pause.setText(_translate("MainSortingWindow", "Pause"))
+        self.pushButton_pause.setToolTip(_translate("MainSortingWindow", "Pause animation."))
+        self.pushButton_resume.setText(_translate("MainSortingWindow", "Resume"))
+        self.pushButton_resume.setToolTip(_translate("MainSortingWindow", "Resume animation."))
+        self.pushButton_stop.setText(_translate("MainSortingWindow", "Stop"))
+        self.pushButton_resume.setToolTip(_translate("MainSortingWindow", "Stop animation."))
         self.menu_file.setTitle(_translate("MainSortingWindow", "File"))
         self.menu_save.setTitle(_translate("MainSortingWindow", "Save File"))
         self.menu_import.setTitle(_translate("MainSortingWindow", "Import File"))
@@ -139,6 +149,10 @@ class MainSortingWindow(QMainWindow):
         self.color_secondary_light = "rgb(150, 150, 150)"
 
         self.color_warning_background = "rgb(100, 0, 0)"
+        self.color_positive_background = '#0a5d00'
+        self.color_positive_background_hover = '#089000'
+        self.color_neutral_background = '#3949ab'
+        self.color_neutral_background_hover = '#6f74dd'
 
         self.color_text = self.color_secondary
         self.color_widget_background = self.color_primary
@@ -160,28 +174,40 @@ class MainSortingWindow(QMainWindow):
                            "240, 240, 240, 255));}")
 
     def __set_sorting_container(self):
-        self.mpl_sorting_widget.setGeometry(QtCore.QRect(230, 70, 901, 491))
+        self.mpl_sorting_widget.setGeometry(QtCore.QRect(0, 20, 1215, 450))
         self.mpl_sorting_widget.setStyleSheet("background-color: " + self.color_widget_background + ";")
         self.mpl_sorting_widget.setObjectName("mpl_sorting_widget")
         self.mpl_sorting_widget.raise_()
 
     def __set_frames(self):
-        self.frame_line.setGeometry(QtCore.QRect(180, 600, 20, 111))
+        self.frame_line.setGeometry(QtCore.QRect(160, 600, 20, 200))
         self.frame_line.setFrameShape(QtWidgets.QFrame.VLine)
         self.frame_line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.frame_line.setObjectName("frame_line")
         self.frame_line.raise_()
 
-        self.frame_line_2.setGeometry(QtCore.QRect(1060, 600, 20, 111))
+        self.frame_line_2.setGeometry(QtCore.QRect(320, 600, 20, 200))
         self.frame_line_2.setFrameShape(QtWidgets.QFrame.VLine)
         self.frame_line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.frame_line_2.setObjectName("frame_line_2")
         self.frame_line_2.raise_()
 
+        self.frame_line_3.setGeometry(QtCore.QRect(530, 600, 20, 200))
+        self.frame_line_3.setFrameShape(QtWidgets.QFrame.VLine)
+        self.frame_line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame_line_3.setObjectName("frame_line_3")
+        self.frame_line_3.raise_()
+
+        self.frame_line_4.setGeometry(QtCore.QRect(730, 600, 20, 200))
+        self.frame_line_4.setFrameShape(QtWidgets.QFrame.VLine)
+        self.frame_line_4.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.frame_line_4.setObjectName("frame_line_4")
+        self.frame_line_4.raise_()
+
     def __set_labels(self):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
-        self.label.setGeometry(QtCore.QRect(520, 10, 271, 41))
+        self.label.setGeometry(QtCore.QRect(490, 10, 271, 41))
         self.label.setStyleSheet("color: " + self.color_text + ";\n"
                                  "\n"
                                  "font: 24pt \"MV Boli\";\n"
@@ -191,7 +217,7 @@ class MainSortingWindow(QMainWindow):
 
         self.label_array_size.setAlignment(QtCore.Qt.AlignCenter)
         self.label_array_size.setObjectName("label_2")
-        self.label_array_size.setGeometry(QtCore.QRect(148, 180, 101, 31))
+        self.label_array_size.setGeometry(QtCore.QRect(35, 595, 101, 31))
         self.label_array_size.setStyleSheet("#label_2{\n"
                                             "color: " + self.color_text + ";\n"
                                             "font: 11pt \\\"MV Boli\\\";\n"
@@ -201,35 +227,29 @@ class MainSortingWindow(QMainWindow):
 
         self.label_speed.setAlignment(QtCore.Qt.AlignCenter)
         self.label_speed.setObjectName("label_3")
-        self.label_speed.setGeometry(QtCore.QRect(1110, 640, 71, 21))
+        self.label_speed.setGeometry(QtCore.QRect(793, 478, 71, 21))
         self.label_speed.setStyleSheet("#label_3{\n"
                                        "color: " + self.color_text + ";\n"
                                        "font: 12pt \\\"MV Boli\\\";\n"
                                        "\n"
                                        "}\n"
                                        "")
+        self.label_speed.setVisible(False)
         self.label_speed.raise_()
 
         self.label_min_value.setAlignment(QtCore.Qt.AlignCenter)
         self.label_min_value.setObjectName("label_array_range")
-        self.label_min_value.setGeometry(QtCore.QRect(82, 260, 91, 41))
+        self.label_min_value.setGeometry(QtCore.QRect(200, 690, 101, 31))
         self.label_min_value.setStyleSheet("color: " + self.color_text + ";\n"
                                            "font: 11pt \\\"MV Boli\\\";")
         self.label_min_value.raise_()
 
         self.label_max_value.setAlignment(QtCore.Qt.AlignCenter)
         self.label_max_value.setObjectName("label_array_range_2")
-        self.label_max_value.setGeometry(QtCore.QRect(212, 260, 91, 41))
+        self.label_max_value.setGeometry(QtCore.QRect(200, 595, 101, 31))
         self.label_max_value.setStyleSheet("color: " + self.color_text + ";\n"
                                            "font: 11pt \\\"MV Boli\\\";")
         self.label_max_value.raise_()
-
-        self.label_seed_array.setAlignment(QtCore.Qt.AlignCenter)
-        self.label_seed_array.setObjectName("label_seed_array")
-        self.label_seed_array.setGeometry(QtCore.QRect(130, 360, 151, 41))
-        self.label_seed_array.setStyleSheet("color: " + self.color_text + ";\n"
-                                            "font: 11pt \\\"MV Boli\\\";")
-        self.label_seed_array.raise_()
 
     def __set_buttons(self):
         self.pushButton_return_main_menu.setGeometry(QtCore.QRect(1190, 10, 51, 51))
@@ -248,14 +268,10 @@ class MainSortingWindow(QMainWindow):
                                                        "}\n"
                                                        "")
         self.pushButton_return_main_menu.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icons/icons/Home.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton_return_main_menu.setIcon(icon)
-        self.pushButton_return_main_menu.setIconSize(QtCore.QSize(40, 40))
         self.pushButton_return_main_menu.setObjectName("pushButton_return_main_menu")
         self.pushButton_return_main_menu.raise_()
 
-        self.pushButton_create_array.setGeometry(QtCore.QRect(30, 610, 130, 40))
+        self.pushButton_create_array.setGeometry(QtCore.QRect(370, 610, 130, 40))
         self.pushButton_create_array.setMinimumSize(QtCore.QSize(30, 40))
         self.pushButton_create_array.setMaximumSize(QtCore.QSize(130, 40))
         self.pushButton_create_array.setStyleSheet("#pushButton_create_array{\n"
@@ -273,7 +289,7 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_create_array.setObjectName("pushButton_create_array")
         self.pushButton_create_array.raise_()
 
-        self.pushButton_manuel_array.setGeometry(QtCore.QRect(30, 660, 130, 40))
+        self.pushButton_manuel_array.setGeometry(QtCore.QRect(370, 660, 130, 40))
         self.pushButton_manuel_array.setMinimumSize(QtCore.QSize(30, 40))
         self.pushButton_manuel_array.setMaximumSize(QtCore.QSize(130, 40))
         self.pushButton_manuel_array.setStyleSheet("#pushButton_manuel_array{\n"
@@ -291,7 +307,7 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_manuel_array.setObjectName("pushButton_manuel_array")
         self.pushButton_manuel_array.raise_()
 
-        self.pushButton_clear.setGeometry(QtCore.QRect(45, 720, 130, 40))
+        self.pushButton_clear.setGeometry(QtCore.QRect(385, 720, 130, 40))
         self.pushButton_clear.setMinimumSize(QtCore.QSize(30, 40))
         self.pushButton_clear.setMaximumSize(QtCore.QSize(100, 40))
         self.pushButton_clear.setStyleSheet("#pushButton_clear{\n"
@@ -309,26 +325,101 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_clear.setObjectName("pushButton_clear")
         self.pushButton_clear.raise_()
 
-        self.pushButton_start_sorting.setGeometry(QtCore.QRect(210, 610, 130, 40))
-        self.pushButton_start_sorting.setMinimumSize(QtCore.QSize(30, 40))
-        self.pushButton_start_sorting.setMaximumSize(QtCore.QSize(130, 40))
-        self.pushButton_start_sorting.setStyleSheet("#pushButton_bubble_sort{\n"
-                                                    "background-color: " + self.color_button_background + ";\n"
+        self.pushButton_start_sorting.setGeometry(QtCore.QRect(570, 610, 140, 40))
+        self.pushButton_start_sorting.setMinimumSize(QtCore.QSize(70, 40))
+        self.pushButton_start_sorting.setMaximumSize(QtCore.QSize(140, 40))
+        self.pushButton_start_sorting.setStyleSheet("#pushButton_start_sorting{\n"
+                                                    "background-color: " + self.color_positive_background + ";\n"
                                                     "font: 11pt MV Boli;\n"
                                                     "color:" + self.color_text_button + ";\n"
                                                     "border:1px solid " + self.color_border + ";\n"
                                                     "border-radius:20px;\n"
                                                     "}\n"
-                                                    "#pushButton_bubble_sort:hover{\n"
-                                                    "background-color: " + self.color_button_background_hover + ";\n"
+                                                    "#pushButton_start_sorting:hover{\n"
+                                                    "background-color: " + self.color_positive_background_hover + ";\n"
                                                     "    color: " + self.color_text_button_hover + ";\n"
                                                     "\n"
                                                     "}")
-        self.pushButton_start_sorting.setObjectName("pushButton_bubble_sort")
+        self.pushButton_start_sorting.setObjectName("pushButton_start_sorting")
         self.pushButton_start_sorting.raise_()
 
+        self.pushButton_compare.setGeometry(QtCore.QRect(570, 750, 140, 40))
+        self.pushButton_compare.setMinimumSize(QtCore.QSize(70, 40))
+        self.pushButton_compare.setMaximumSize(QtCore.QSize(140, 40))
+        self.pushButton_compare.setStyleSheet("#pushButton_compare{\n"
+                                              "background-color: " + self.color_neutral_background + ";\n"
+                                              "font: 11pt MV Boli;\n"
+                                              "color:" + self.color_text_button + ";\n"
+                                              "border:1px solid " + self.color_border + ";\n"
+                                              "border-radius:20px;\n"
+                                              "}\n"
+                                              "#pushButton_compare:hover{\n"
+                                              "background-color: " + self.color_neutral_background_hover + ";\n"
+                                              "    color: " + self.color_text_button_hover + ";\n"
+                                              "\n"
+                                              "}")
+        self.pushButton_compare.setObjectName("pushButton_compare")
+        self.pushButton_compare.raise_()
+
+        self.pushButton_pause.setGeometry(QtCore.QRect(550, 450, 80, 40))
+        self.pushButton_pause.setMinimumSize(QtCore.QSize(80, 40))
+        self.pushButton_pause.setMaximumSize(QtCore.QSize(160, 40))
+        self.pushButton_pause.setStyleSheet("#pushButton_pause{\n"
+                                            "background-color: " + self.color_button_background + ";\n"
+                                            "font: 11pt MV Boli;\n"
+                                            "color:" + self.color_text_button + ";\n"
+                                            "border:1px solid " + self.color_border + ";\n"
+                                            "border-radius:20px;\n"
+                                            "}\n"
+                                            "#pushButton_pause:hover{\n"
+                                            "background-color: " + self.color_button_background_hover + ";\n"
+                                            "    color: " + self.color_text_button_hover + ";\n"
+                                            "\n"
+                                            "}")
+        self.pushButton_pause.setObjectName("pushButton_pause")
+        self.pushButton_pause.setVisible(False)
+        self.pushButton_pause.raise_()
+
+        self.pushButton_resume.setGeometry(QtCore.QRect(650, 450, 80, 40))
+        self.pushButton_resume.setMinimumSize(QtCore.QSize(80, 40))
+        self.pushButton_resume.setMaximumSize(QtCore.QSize(160, 40))
+        self.pushButton_resume.setStyleSheet("#pushButton_resume{\n"
+                                             "background-color: " + self.color_button_background + ";\n"
+                                             "font: 11pt MV Boli;\n"
+                                             "color:" + self.color_text_button + ";\n"
+                                             "border:1px solid " + self.color_border + ";\n"
+                                             "border-radius:20px;\n"
+                                             "}\n"
+                                             "#pushButton_resume:hover{\n"
+                                             "background-color: " + self.color_button_background_hover + ";\n"
+                                             "    color: " + self.color_text_button_hover + ";\n"
+                                             "\n"
+                                             "}")
+        self.pushButton_resume.setObjectName("pushButton_resume")
+        self.pushButton_resume.setVisible(False)
+        self.pushButton_resume.raise_()
+
+        self.pushButton_stop.setGeometry(QtCore.QRect(450, 450, 80, 40))
+        self.pushButton_stop.setMinimumSize(QtCore.QSize(80, 40))
+        self.pushButton_stop.setMaximumSize(QtCore.QSize(160, 40))
+        self.pushButton_stop.setStyleSheet("#pushButton_stop{\n"
+                                           "background-color: " + self.color_button_background + ";\n"
+                                           "font: 11pt MV Boli;\n"
+                                           "color:" + self.color_text_button + ";\n"
+                                           "border:1px solid " + self.color_border + ";\n"
+                                           "border-radius:20px;\n"
+                                           "}\n"
+                                           "#pushButton_stop:hover{\n"
+                                           "background-color: " + self.color_button_background_hover + ";\n"
+                                           "    color: " + self.color_text_button_hover + ";\n"
+                                           "\n"
+                                           "}")
+        self.pushButton_stop.setObjectName("pushButton_stop")
+        self.pushButton_stop.setVisible(False)
+        self.pushButton_stop.raise_()
+
     def __set_dials(self):
-        self.dial_animation_speed.setGeometry(QtCore.QRect(1090, 590, 121, 121))
+        self.dial_animation_speed.setGeometry(QtCore.QRect(770, 430, 121, 121))
         self.dial_animation_speed.setStyleSheet("#dial_animation_speed{\n"
                                                 "background-color: " + self.color_slider + ";\n"
                                                 "}")
@@ -337,10 +428,11 @@ class MainSortingWindow(QMainWindow):
         self.dial_animation_speed.setNotchTarget(10.0)
         self.dial_animation_speed.setNotchesVisible(True)
         self.dial_animation_speed.setObjectName("dial_animation_speed")
+        self.dial_animation_speed.setVisible(False)
         self.dial_animation_speed.raise_()
 
     def __set_line_edits(self):
-        self.lineEdit_array_size.setGeometry(QtCore.QRect(160, 220, 81, 41))
+        self.lineEdit_array_size.setGeometry(QtCore.QRect(45, 630, 81, 41))
         self.lineEdit_array_size.setValidator(QIntValidator(1, 1000, self))
         self.lineEdit_array_size.setStyleSheet("background-color: " + self.color_widget_background + ";\n"
                                                "font: 13pt \"MV Boli\";\n"
@@ -351,7 +443,7 @@ class MainSortingWindow(QMainWindow):
         self.lineEdit_array_size.setObjectName("lineEdit_array_length")
         self.lineEdit_array_size.raise_()
 
-        self.lineEdit_min_value.setGeometry(QtCore.QRect(90, 300, 81, 41))
+        self.lineEdit_min_value.setGeometry(QtCore.QRect(210, 725, 81, 41))
         self.lineEdit_min_value.setStyleSheet("#lineEdit_min_value{\n"
                                               "background-color: " + self.color_widget_background + ";\n"
                                               "font: 12pt  MV Boli;\n"
@@ -363,7 +455,7 @@ class MainSortingWindow(QMainWindow):
         self.lineEdit_min_value.setValidator(QIntValidator(-100000, -100000, self))
         self.lineEdit_min_value.raise_()
 
-        self.lineEdit_max_value.setGeometry(QtCore.QRect(220, 300, 81, 41))
+        self.lineEdit_max_value.setGeometry(QtCore.QRect(210, 630, 81, 41))
         self.lineEdit_max_value.setStyleSheet("#lineEdit_max_value{\n"
                                               "background-color: " + self.color_widget_background + ";\n"
                                               "font: 12pt  MV Boli;\n"
@@ -381,13 +473,13 @@ class MainSortingWindow(QMainWindow):
                                                   CountingSorter.COUNTING_SORT, HeapSorter.HEAP_SORT,
                                                   QuickSorter.QUICK_SORT, RadixSorter.RADIX_SORT])
 
-        self.comboBox_sorting_algorithms.setGeometry(QtCore.QRect(400, 610, 130, 40))
-        self.comboBox_sorting_algorithms.setMinimumSize(QtCore.QSize(180, 40))
-        self.comboBox_sorting_algorithms.setMaximumSize(QtCore.QSize(250, 40))
+        self.comboBox_sorting_algorithms.setGeometry(QtCore.QRect(570, 680, 130, 40))
+        self.comboBox_sorting_algorithms.setMinimumSize(QtCore.QSize(143, 40))
+        self.comboBox_sorting_algorithms.setMaximumSize(QtCore.QSize(200, 40))
         self.comboBox_sorting_algorithms.raise_()
 
     def __set_check_boxes(self):
-        self.checkBox_seed.setGeometry(QtCore.QRect(50, 570, 121, 21))
+        self.checkBox_seed.setGeometry(QtCore.QRect(35, 700, 121, 21))
         self.checkBox_seed.setStyleSheet("#checkBox_seed{\n"
                                          "font: 11pt \"MV Boli\";\n"
                                          "color:" + self.color_text + ";\n"
@@ -396,7 +488,7 @@ class MainSortingWindow(QMainWindow):
         self.checkBox_seed.raise_()
 
     def __set_spin_boxes(self):
-        self.spinBox_seed.setGeometry(QtCore.QRect(160, 400, 81, 31))
+        self.spinBox_seed.setGeometry(QtCore.QRect(47, 738, 81, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.spinBox_seed.setFont(font)
@@ -412,38 +504,22 @@ class MainSortingWindow(QMainWindow):
         self.spinBox_seed.setObjectName("spinBox_seed")
         self.spinBox_seed.raise_()
 
-    def __set_icons(self):
-        self.icon1.addPixmap(QtGui.QPixmap(":/icons/icons/save.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.icon2.addPixmap(QtGui.QPixmap(":/icons/icons/read.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.icon3.addPixmap(QtGui.QPixmap(":/icons/icons/txt_logo.webp"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.icon4.addPixmap(QtGui.QPixmap(":/icons/icons/2306130.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-
-        self.icon5.addPixmap(QtGui.QPixmap(":/icons/icons/csv-file-512.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.spinBox_seed.setVisible(self.checkBox_seed.isChecked())
 
     def __set_actions(self):
-        self.action_txt.setIcon(self.icon3)
         self.action_txt.setObjectName("action_txt")
 
-        self.action_xlsx.setIcon(self.icon4)
         self.action_xlsx.setObjectName("action_xlsx")
 
-        self.action_csv.setIcon(self.icon5)
         self.action_csv.setObjectName("action_csv")
 
-        self.actionText_File.setIcon(self.icon3)
-
         self.actionText_File.setObjectName("actionText_File")
-        self.actionExcel_File.setIcon(self.icon4)
+
         self.actionExcel_File.setObjectName("actionExcel_File")
 
-        self.actionCsv_File.setIcon(self.icon5)
         self.actionCsv_File.setObjectName("actionCsv_File")
 
     def __set_menu(self):
-        self.__set_icons()
         self.__set_actions()
 
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 1250, 21))
@@ -455,10 +531,8 @@ class MainSortingWindow(QMainWindow):
         self.menu_file.setStyleSheet("")
         self.menu_file.setObjectName("menuFile")
 
-        self.menu_save.setIcon(self.icon1)
         self.menu_save.setObjectName("menu_save")
 
-        self.menu_import.setIcon(self.icon2)
         self.menu_import.setObjectName("menu_import")
 
         self.setMenuBar(self.menuBar)

@@ -13,7 +13,7 @@ from src.algorithms.quick_sorter import QuickSorter
 from src.algorithms.radix_sorter import RadixSorter
 
 
-def comparison_test():
+def comparison_test(canvas):
     # Declare sorter objects.
     insertion_sorter = InsertionSorter()
     merge_insertion_sorter = MergeSorter(is_insertion_based=True)
@@ -28,9 +28,9 @@ def comparison_test():
     sorters = [insertion_sorter, merge_insertion_sorter, merge_sorter,
                bubble_sorter, quick_sorter, heap_sorter, counter_sorter, radix_sorter]
 
-    different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000]
+    different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 300, 400, 500]
     different_array_sizes_small = np.arange(2, 100, 1)
-    different_array_sizes_medium = np.arange(100, 1050, 50)
+    different_array_sizes_medium = np.arange(100, 550, 50)
 
     different_array_sizes = np.concatenate([different_array_sizes_small, different_array_sizes_medium])
     # different_array_sizes = different_array_sizes_small
@@ -56,15 +56,14 @@ def comparison_test():
             __sort_analyzer(sorter, will_be_printed)
 
     # Plot execution times versus array sizes
+    canvas.axes.get_xaxis().set_visible(True)
+    canvas.axes.get_yaxis().set_visible(True)
     for sorter in sorters:
-        plt.plot(different_array_sizes, sorter.execution_timings, label=sorter.get_algorithm_name)
+        canvas.axes.plot(different_array_sizes, sorter.execution_timings, label=sorter.get_algorithm_name)
 
-    plt.xlabel('Array sizes')
-    plt.ylabel('Execution timings')
-    plt.title('Sorter Algorithms Comparison')
-    plt.legend()
+    canvas.axes.legend()
     # show graph
-    plt.show()
+    canvas.draw()
 
 
 # Function to compare and analyze algorithms
