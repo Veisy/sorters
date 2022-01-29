@@ -32,6 +32,13 @@ list_of_intermediate_number_arrays = [[]]
 current_index = 0
 is_animation_active = False
 
+random_default_size = 15
+random_default_min = 1
+random_default_max = 50
+
+fibonacci_default_size = 10
+fibonacci_max = 20
+
 
 def main():
     # Main menu is opened.
@@ -39,6 +46,7 @@ def main():
     main_window.show()
     set_canvas()
     connect_buttons()
+    set_placeholder_values()
 
 
 def set_canvas():
@@ -63,6 +71,13 @@ def connect_buttons():
     main_window.pushButton_back.clicked.connect(back)
 
 
+def set_placeholder_values():
+    main_window.lineEdit_array_size.setPlaceholderText(str(random_default_size))
+    main_window.lineEdit_max_value.setPlaceholderText(str(random_default_max))
+    main_window.lineEdit_min_value.setPlaceholderText(str(random_default_min))
+    main_window.lineEdit_fibonacci.setPlaceholderText(str(fibonacci_default_size))
+
+
 def create_random_array():
     text_size = main_window.lineEdit_array_size.text()
     seed_value = main_window.spinBox_seed.value()
@@ -72,7 +87,9 @@ def create_random_array():
 
     input_array.clear()
     random_array = generate_random_array(text_size=text_size, text_min_value=text_min_value,
-                                         text_max_value=text_max_value, is_seed_active=is_seed_active,
+                                         text_max_value=text_max_value, default_size=random_default_size,
+                                         default_min=random_default_min, default_max=random_default_max,
+                                         is_seed_active=is_seed_active,
                                          seed_value=seed_value)
     input_array.extend(random_array)
     draw(random_array)
@@ -87,10 +104,10 @@ def create_random_array():
 def create_fibonacci_array():
     text_fibonacci_size = main_window.lineEdit_fibonacci.text()
 
-    if text_fibonacci_size != '' and 20 > int(text_fibonacci_size) > 1:
+    if text_fibonacci_size != '' and fibonacci_max > int(text_fibonacci_size) > 1:
         fibonacci_size = int(text_fibonacci_size)
     else:
-        fibonacci_size = 15
+        fibonacci_size = fibonacci_default_size
 
     fibonacci_sequence = generate_fibonacci(fibonacci_size)
     input_array.clear()
@@ -256,19 +273,23 @@ def back():
 
 def toggle_views_visibility(is_visible):
     array_independent_views = [main_window.pushButton_start_sorting, main_window.pushButton_compare,
-                               main_window.comboBox_sorting_algorithms, main_window.menuBar,
+                               main_window.comboBox_sorting_algorithms,
                                main_window.pushButton_create_array, main_window.pushButton_manuel_array,
                                main_window.pushButton_clear, main_window.lineEdit_array_size,
                                main_window.lineEdit_max_value, main_window.lineEdit_min_value,
                                main_window.label_array_size, main_window.label_max_value,
                                main_window.label_min_value, main_window.lineEdit_search, main_window.pushButton_search,
                                main_window.checkBox_seed, main_window.spinBox_seed,
-                               main_window.lineEdit_fibonacci, main_window.pushButton_fibonacci]
+                               main_window.lineEdit_fibonacci, main_window.pushButton_fibonacci,
+                               main_window.frame_line, main_window.frame_line_2, main_window.frame_line_3,
+                               main_window.frame_line_4, main_window.frame_line_5]
     for view in array_independent_views:
         if is_visible:
             view.setVisible(True)
+            view.raise_()
         else:
             view.setVisible(False)
+            view.lower()
 
     pause_stop_resume_back_buttons = [main_window.pushButton_pause, main_window.pushButton_resume,
                                       main_window.pushButton_stop, main_window.pushButton_back,
@@ -276,8 +297,12 @@ def toggle_views_visibility(is_visible):
     for view in pause_stop_resume_back_buttons:
         if is_visible:
             view.setVisible(False)
+            view.lower()
         else:
             view.setVisible(True)
+            view.raise_()
+
+    main_window.update()
 
 
 def paint_different_elements(first_array, second_array):
@@ -291,6 +316,7 @@ def paint_different_elements(first_array, second_array):
 
 def set_seed_visibility():
     main_window.spinBox_seed.setVisible(main_window.checkBox_seed.isChecked())
+    main_window.update()
 
 
 if __name__ == '__main__':

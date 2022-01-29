@@ -29,7 +29,6 @@ class MainSortingWindow(QMainWindow):
         self.label_min_value = QtWidgets.QLabel(self)
         self.label_max_value = QtWidgets.QLabel(self)
 
-        self.pushButton_return_main_menu = QtWidgets.QPushButton(self)
         self.pushButton_create_array = QtWidgets.QPushButton(self)
         self.pushButton_manuel_array = QtWidgets.QPushButton(self)
         self.pushButton_fibonacci = QtWidgets.QPushButton(self)
@@ -60,11 +59,6 @@ class MainSortingWindow(QMainWindow):
         self.actionCsv_File = QtWidgets.QAction(self)
         self.actionText_File = QtWidgets.QAction(self)
         self.actionExcel_File = QtWidgets.QAction(self)
-
-        self.menuBar = QtWidgets.QMenuBar(self)
-        self.menu_file = QtWidgets.QMenu(self.menuBar)
-        self.menu_import = QtWidgets.QMenu(self.menu_file)
-        self.menu_save = QtWidgets.QMenu(self.menu_file)
 
         self.mpl_sorting_widget = MplSortingWidget(self)
 
@@ -103,7 +97,6 @@ class MainSortingWindow(QMainWindow):
         self.__set_combo_boxes()
         self.__set_check_boxes()
         self.__set_spin_boxes()
-        self.__set_menu()
 
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -128,7 +121,6 @@ class MainSortingWindow(QMainWindow):
         self.checkBox_seed.setToolTip(
             _translate("MainWindow_SortingWindow", "Constant array for every parameters."))
         self.checkBox_seed.setText(_translate("MainWindow_SortingWindow", "Seed Array"))
-        self.pushButton_return_main_menu.setToolTip(_translate("MainSortingWindow", "Back to Home Window"))
         self.label_min_value.setText(_translate("MainSortingWindow", "Min Value"))
         self.lineEdit_min_value.setToolTip(_translate("MainSortingWindow", "Enter min value."))
         self.label_max_value.setText(_translate("MainSortingWindow", "Max Value"))
@@ -145,15 +137,6 @@ class MainSortingWindow(QMainWindow):
         self.pushButton_resume.setToolTip(_translate("MainSortingWindow", "Stop animation."))
         self.pushButton_back.setText(_translate("MainSortingWindow", "Back"))
         self.pushButton_back.setToolTip(_translate("MainSortingWindow", "Show previous sorting step."))
-        self.menu_file.setTitle(_translate("MainSortingWindow", "File"))
-        self.menu_save.setTitle(_translate("MainSortingWindow", "Save File"))
-        self.menu_import.setTitle(_translate("MainSortingWindow", "Import File"))
-        self.action_txt.setText(_translate("MainSortingWindow", "Txt File"))
-        self.action_xlsx.setText(_translate("MainSortingWindow", "Xlsx File"))
-        self.action_csv.setText(_translate("MainSortingWindow", "Csv File"))
-        self.actionText_File.setText(_translate("MainSortingWindow", "Text File"))
-        self.actionExcel_File.setText(_translate("MainSortingWindow", "Excel File"))
-        self.actionCsv_File.setText(_translate("MainSortingWindow", "Csv File"))
 
     def set_colors(self):
         self.color_primary = "rgb(240, 240, 240)"
@@ -273,25 +256,6 @@ class MainSortingWindow(QMainWindow):
         self.label_max_value.raise_()
 
     def __set_buttons(self):
-        self.pushButton_return_main_menu.setGeometry(QtCore.QRect(1190, 10, 51, 51))
-        self.pushButton_return_main_menu.setStyleSheet("#pushButton_return_main_menu{\n"
-                                                       "background-color: rgba(0, 0, 0,0);\n"
-                                                       "border:1px;\n"
-                                                       "}\n"
-                                                       "#pushButton_return_main_menu:hover{\n"
-                                                       "background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, "
-                                                       "radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(0, 0, 0, 0), "
-                                                       "stop:0.52 rgba(0, 0, 0, 0), stop:0.565 rgba(82, 121, 76, 33), "
-                                                       "stop:0.65 rgba(159, 235, 148, 64), stop:0.721925 rgba(255, "
-                                                       "238, 150, 129), stop:0.77 rgba(255, 128, 128, 204), "
-                                                       "stop:0.89 rgba(191, 128, 255, 64), stop:1 rgba(0, 0, 0, 0));\n "
-                                                       "\n"
-                                                       "}\n"
-                                                       "")
-        self.pushButton_return_main_menu.setText("")
-        self.pushButton_return_main_menu.setObjectName("pushButton_return_main_menu")
-        self.pushButton_return_main_menu.raise_()
-
         self.pushButton_create_array.setGeometry(QtCore.QRect(370, 610, 130, 40))
         self.pushButton_create_array.setMinimumSize(QtCore.QSize(30, 40))
         self.pushButton_create_array.setMaximumSize(QtCore.QSize(130, 40))
@@ -624,30 +588,3 @@ class MainSortingWindow(QMainWindow):
 
         self.actionCsv_File.setObjectName("actionCsv_File")
 
-    def __set_menu(self):
-        self.__set_actions()
-
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1250, 21))
-        self.menuBar.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.menuBar.setAutoFillBackground(False)
-        self.menuBar.setStyleSheet("")
-        self.menuBar.setObjectName("menuBar")
-
-        self.menu_file.setStyleSheet("")
-        self.menu_file.setObjectName("menuFile")
-
-        self.menu_save.setObjectName("menu_save")
-
-        self.menu_import.setObjectName("menu_import")
-
-        self.setMenuBar(self.menuBar)
-
-        self.menu_save.addAction(self.action_txt)
-        self.menu_save.addAction(self.action_xlsx)
-        self.menu_save.addAction(self.action_csv)
-        self.menu_import.addAction(self.actionText_File)
-        self.menu_import.addAction(self.actionExcel_File)
-        self.menu_import.addAction(self.actionCsv_File)
-        self.menu_file.addAction(self.menu_save.menuAction())
-        self.menu_file.addAction(self.menu_import.menuAction())
-        self.menuBar.addAction(self.menu_file.menuAction())
