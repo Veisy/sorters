@@ -1,207 +1,327 @@
+import random
+import sys
 import time
 
 import matplotlib
-import matplotlib.pyplot as plt
-import numpy as np
-from numpy.random import randint
-from numpy.random import seed
+import numpy
+from PyQt5.QtWidgets import QApplication
 
 from algorithms.bubble_sorter import BubbleSorter
-from algorithms.counter_sorter import CounterSorter
+from algorithms.counting_sorter import CountingSorter
 from algorithms.heap_sorter import HeapSorter
 from algorithms.insertion_sorter import InsertionSorter
 from algorithms.merge_sorter import MergeSorter
 from algorithms.quick_sorter import QuickSorter
 from algorithms.radix_sorter import RadixSorter
+from src.ui.main_sorting_window import MainSortingWindow
+from src.utils.comparison import comparison_test
+from src.utils.fibonacci_generator import generate_fibonacci
+from src.utils.is_sorted import is_sorted
+from src.utils.random_array_generator import generate_random_array
+from src.utils.searchers import linear_search
 
 matplotlib.use('TkAgg')
 
 # NAME: VEYSEL YUSUF YILMAZ, NO: 190403062
-# This is the Homework 1 of Introduction to Algorithms course.
+# This is a homework project of the Introduction to Algorithms course.
 # Several sorting algorithms are implemented and analyzed in Python.
 # TODO: User Interface implementation.
 
-# Map operations to indexes for managing program flow.
-# Since these constants are used in the whole program,
-# it is better to declare and edit from one place in terms of bug risk and ease.
-INSERTION_INDEX = "1"
-MERGE_INSERTION_INDEX = "2"
-MERGE_INDEX = "3"
-BUBBLE_INDEX = "4"
-QUICK_INDEX = "5"
-HEAP_INDEX = "6"
-COUNTER_INDEX = "7"
-RADIX_INDEX = "8"
-SORTER_INDEXES = [INSERTION_INDEX, MERGE_INSERTION_INDEX, MERGE_INDEX,
-                  BUBBLE_INDEX, QUICK_INDEX, HEAP_INDEX, COUNTER_INDEX, RADIX_INDEX]
-COMPARISON_INDEX = "9"
-EXIT_INDEX = "0"
+input_array = []
+list_of_intermediate_number_arrays = [[]]
+current_index = 0
+is_animation_active = False
+
+random_default_size = 15
+random_default_min = 1
+random_default_max = 50
+
+fibonacci_default_size = 10
+fibonacci_max = 20
 
 
 def main():
     # Main menu is opened.
     # Repeat over and over until the repeat_main flag is false.
-
-    repeat_main = True
-    while repeat_main:
-
-        operation = input("\nPlease select the operation you want to do:\n" +
-                          INSERTION_INDEX + "-)Insertion Sort\n" +
-                          MERGE_INSERTION_INDEX + "-)Merge-Insertion Sort\n" +
-                          MERGE_INDEX + "-)Merge Sort\n" +
-                          BUBBLE_INDEX + "-)Bubble Sort\n" +
-                          QUICK_INDEX + "-)Quick Sort\n" +
-                          HEAP_INDEX + "-)Heap Sort\n" +
-                          COUNTER_INDEX + "-)Counter Sort\n" +
-                          RADIX_INDEX + "-)Radix Sort\n" +
-                          COMPARISON_INDEX + "-)Comparison Test\n" +
-                          EXIT_INDEX + "-)Exit\n")
-
-        # Initially check if user wants to quit.
-        if operation == EXIT_INDEX:
-            repeat_main = False
-
-        elif operation == COMPARISON_INDEX:
-            comparison_test()
-
-        elif operation in SORTER_INDEXES:
-            manual_entrance(operation)
-
-        else:
-            print("Please enter a valid operation.")
+    main_window.show()
+    set_canvas()
+    connect_buttons()
+    set_placeholder_values()
 
 
-def comparison_test():
-    # Declare sorter objects.
-    insertion_sorter = InsertionSorter()
-    merge_insertion_sorter = MergeSorter(True)
-    merge_sorter = MergeSorter()
-    bubble_sorter = BubbleSorter()
-    quick_sorter = QuickSorter()
-    heap_sorter = HeapSorter()
-    counter_sorter = CounterSorter()
-    radix_sorter = RadixSorter()
-
-    # All sorters objects stored in one array to simplify access and loop.
-    sorters = [insertion_sorter, merge_insertion_sorter, merge_sorter,
-               bubble_sorter, quick_sorter, heap_sorter, counter_sorter, radix_sorter]
-
-    different_array_sizes_print = [10, 20, 40, 60, 80, 100, 200, 400, 600, 800, 1000]
-    different_array_sizes_small = np.arange(2, 100, 1)
-    different_array_sizes_medium = np.arange(100, 1050, 50)
-
-    different_array_sizes = np.concatenate([different_array_sizes_small, different_array_sizes_medium])
-    # different_array_sizes = different_array_sizes_small
-
-    for array_size in different_array_sizes:
-        # We need to use exactly same array to compare different algorithms
-        # If we create different random arrays, the execution time did not differ noticeably in this case ,
-        # but still it would not be a full comparison.
-        # We seed with the same value to all Sorter objects,
-        # which means all generated random arrays will be same.
-        seed(1)
-
-        # Print the analyze result if the array_size one of the different_array_sizes_print elements.
-        will_be_printed = False
-
-        if array_size in different_array_sizes_print:
-            print("\n\nArray size: " + str(array_size) + "\n")
-            will_be_printed = True
-
-        # Analyze algorithms.
-        for sorter in sorters:
-            sorter.number_array = randint(1, array_size, array_size).tolist()
-            sort_analyzer(sorter, will_be_printed)
-
-    # Plot execution times versus array sizes
-    for sorter in sorters:
-        plt.plot(different_array_sizes, sorter.execution_timings, label=sorter.get_algorithm_name)
-
-    plt.xlabel('Array sizes')
-    plt.ylabel('Execution timings')
-    plt.title('Sorter Algorithms Comparison')
-    plt.legend()
-    # show graph
-    plt.show()
+def set_canvas():
+    canvas = main_window.mpl_sorting_widget.canvas
+    canvas.axes.get_xaxis().set_visible(False)
+    canvas.axes.get_yaxis().set_visible(False)
+    return canvas
 
 
-def manual_entrance(operation):
-    print("\nPlease enter the value you want to sort:\n" +
-          "Press 'q' to sorting.")
+def connect_buttons():
+    main_window.pushButton_start_sorting.clicked.connect(lambda: clicked_sort(main_window.comboBox_sorting_algorithms))
+    main_window.pushButton_create_array.clicked.connect(create_random_array)
+    # main_window.pushButton_manuel_array.clicked.connect(add_manual_element)
+    main_window.pushButton_fibonacci.clicked.connect(create_fibonacci_array)
+    main_window.pushButton_clear.clicked.connect(clear_input_array)
+    main_window.checkBox_seed.stateChanged.connect(set_seed_visibility)
+    main_window.pushButton_compare.clicked.connect(compare_algorithms)
+    main_window.pushButton_search.clicked.connect(search)
+    main_window.pushButton_pause.clicked.connect(pause_animation)
+    main_window.pushButton_resume.clicked.connect(resume_animation)
+    main_window.pushButton_stop.clicked.connect(stop_animation)
+    main_window.pushButton_back.clicked.connect(back)
 
-    # Add numbers in list to sort.
-    number_array = []
 
-    # Check if the 'q' key is pressed and receiving inputs is done.
-    controller = True
-    while controller:
-        input_string = check_input()
-        if not input_string == "q":
-            number_input = float(input_string)
-            number_array.append(number_input)
-        else:
-            controller = False
+def set_placeholder_values():
+    main_window.lineEdit_array_size.setPlaceholderText(str(random_default_size))
+    main_window.lineEdit_max_value.setPlaceholderText(str(random_default_max))
+    main_window.lineEdit_min_value.setPlaceholderText(str(random_default_min))
+    main_window.lineEdit_fibonacci.setPlaceholderText(str(fibonacci_default_size))
 
-    if operation == INSERTION_INDEX:
-        sorter = InsertionSorter()
-    elif operation == MERGE_INSERTION_INDEX:
-        sorter = MergeSorter(True)
-    elif operation == MERGE_INDEX:
-        sorter = MergeSorter()
-    elif operation == BUBBLE_INDEX:
-        sorter = BubbleSorter()
-    elif operation == QUICK_INDEX:
-        sorter = QuickSorter()
-    elif operation == HEAP_INDEX:
-        sorter = HeapSorter()
-    elif operation == COUNTER_INDEX:
-        sorter = CounterSorter()
+
+def create_random_array():
+    text_size = main_window.lineEdit_array_size.text()
+    seed_value = main_window.spinBox_seed.value()
+    text_min_value = main_window.lineEdit_min_value.text()
+    text_max_value = main_window.lineEdit_max_value.text()
+    is_seed_active = main_window.checkBox_seed.isChecked()
+
+    input_array.clear()
+    random_array = generate_random_array(text_size=text_size, text_min_value=text_min_value,
+                                         text_max_value=text_max_value, default_size=random_default_size,
+                                         default_min=random_default_min, default_max=random_default_max,
+                                         is_seed_active=is_seed_active,
+                                         seed_value=seed_value)
+    input_array.extend(random_array)
+    draw(random_array)
+    print(str(input_array))
+
+
+# TODO:
+# def add_manual_element():
+#     if main_window.line
+
+
+def create_fibonacci_array():
+    text_fibonacci_size = main_window.lineEdit_fibonacci.text()
+
+    if text_fibonacci_size != '' and fibonacci_max > int(text_fibonacci_size) > 1:
+        fibonacci_size = int(text_fibonacci_size)
     else:
-        sorter = RadixSorter()
+        fibonacci_size = fibonacci_default_size
 
-    sorter.number_array = number_array
+    fibonacci_sequence = generate_fibonacci(fibonacci_size)
+    input_array.clear()
+    input_array.extend(fibonacci_sequence)
+    random.shuffle(input_array)
+    draw(input_array)
+
+
+def clear_input_array():
+    global list_of_intermediate_number_arrays
+    global is_animation_active
+    global current_index
+    is_animation_active = False
+    current_index = 0
+    list_of_intermediate_number_arrays.clear()
+    input_array.clear()
+    draw(input_array)
+
+
+def clicked_sort(sorting_algorithms):
+    # If an array is empty, or array is already sorted, return without doing anything.
+    if len(input_array) <= 0 or is_sorted(input_array):
+        return
+
+    selected_algorithm = sorting_algorithms.currentText()
+    if selected_algorithm == InsertionSorter.INSERTION_SORT:
+        sorter = InsertionSorter(is_animating=True)
+    elif selected_algorithm == MergeSorter.MERGE_INSERTION_SORT:
+        sorter = MergeSorter(is_insertion_based=True, is_animating=True)
+    elif selected_algorithm == MergeSorter.MERGE_SORT:
+        sorter = MergeSorter(is_animating=True)
+    elif selected_algorithm == HeapSorter.HEAP_SORT:
+        sorter = HeapSorter(is_animating=True)
+    elif selected_algorithm == QuickSorter.QUICK_SORT:
+        sorter = QuickSorter(is_animating=True)
+    elif selected_algorithm == RadixSorter.RADIX_SORT and min(input_array) >= 0:
+        sorter = RadixSorter(is_animating=True)
+    elif selected_algorithm == CountingSorter.COUNTING_SORT and min(input_array) >= 0:
+        sorter = CountingSorter(is_animating=True)
+    else:
+        sorter = BubbleSorter(is_animating=True)
+
+    print(sorter.get_algorithm_name + " Clicked!")
+    sort(sorter)
+
+
+def sort(sorter):
+    global list_of_intermediate_number_arrays
+    global current_index
+    current_index = 0
+
+    toggle_views_visibility(is_visible=False)
+
+    sorter.number_array = input_array.copy()
     sorter.sort()
 
-    print(sorter.number_array)
+    # Retrieve all intermediate steps in the sorting process. That is, the memory of the sorting process.
+    list_of_intermediate_number_arrays = sorter.intermediate_number_arrays
+    animate_sorting()
 
 
-# Function to compare and analyze algorithms
-def sort_analyzer(sorter_object, is_printed):
-    # If array size is bigger than 10 thousand, we can not use Insertion and Bubble Sort anymore.
-    if not (((sorter_object.get_algorithm_name == InsertionSorter.INSERTION_SORT
-              or sorter_object.get_algorithm_name == BubbleSorter.BUBBLE_SORT)
-             and len(sorter_object.number_array) > 100000)
-            or (sorter_object.get_algorithm_name == MergeSorter.MERGE_INSERTION_SORT
-                and len(sorter_object.number_array) > 200000)):
+def animate_sorting():
+    global list_of_intermediate_number_arrays
+    global is_animation_active
+    global current_index
 
-        start = time.time()
-        sorter_object.sort()
-        end = time.time()
+    is_animation_active = True
 
-        execution_time = end - start
-
-        # Store execution times, by appending to overall timings pool.
-        sorter_object.execution_timings.append(execution_time)
-
-        if is_printed:
-            print(sorter_object.get_algorithm_name + " execution time: " + str(execution_time))
-
-
-# Function to check keyboard input.
-def check_input():
-    keyboard_input = input()
-    while True:
-        try:
-            if keyboard_input == "q":
-                break
-            float(keyboard_input)
+    while len(list_of_intermediate_number_arrays) > current_index:
+        # We exit here in Pause and Stop cases.
+        # In the Pause case, we know where we are with the current_index variable.
+        if not is_animation_active:
             break
-        except ValueError:
-            print("Please enter a valid number.")
-            keyboard_input = input()
+        # 'Is this the last step?' control.
+        if current_index == len(list_of_intermediate_number_arrays) - 1:
+            draw(list_of_intermediate_number_arrays[current_index],
+                 all_bars_color=str(main_window.color_positive_background_hover))
+            toggle_views_visibility(True)
+        else:
+            if current_index > 0:
+                compared_array = list_of_intermediate_number_arrays[current_index - 1]
+            else:
+                compared_array = input_array
 
-    return keyboard_input
+            paint_different_elements(compared_array, list_of_intermediate_number_arrays[current_index])
+
+        current_index += 1
+
+        time.sleep(1 / main_window.dial_animation_speed.value())
+        QApplication.processEvents()
+
+    is_animation_active = False
+    set_seed_visibility()
+
+
+def draw(array, all_bars_color='#3949ab', highlighted_bar_indexes=None, highlight=False):
+    canvas = set_canvas()
+    canvas.axes.clear()
+    canvas.axes.bar(numpy.arange(len(array)),
+                    array, color=[all_bars_color])
+    if highlight and len(highlighted_bar_indexes) > 0:
+        for index in highlighted_bar_indexes:
+            canvas.axes.bar(numpy.arange(len(array))[index],
+                            array[index], color=main_window.color_complementary)
+
+    canvas.axes.patch.set_alpha(0)
+    canvas.draw()
+
+
+def compare_algorithms():
+    canvas = main_window.mpl_sorting_widget.canvas
+    canvas.axes.clear()
+    comparison_test(canvas)
+
+
+def search():
+    global input_array
+
+    if len(input_array) > 0:
+        searched_element = main_window.lineEdit_search.text()
+
+        if searched_element != '':
+            index = linear_search(input_array.copy(), int(searched_element))
+            draw(input_array, highlight=True, highlighted_bar_indexes=[index])
+
+
+def pause_animation():
+    global is_animation_active
+    global current_index
+    if is_animation_active:
+        current_index -= 1
+    is_animation_active = False
+
+
+def resume_animation():
+    animate_sorting()
+
+
+def stop_animation():
+    global input_array
+    global current_index
+    global is_animation_active
+    is_animation_active = False
+    toggle_views_visibility(True)
+    current_index = 0
+    draw(input_array)
+
+
+def back():
+    global list_of_intermediate_number_arrays
+    global current_index
+    global is_animation_active
+    if is_animation_active:
+        pause_animation()
+    current_index -= 1
+
+    if current_index > 0:
+        paint_different_elements(list_of_intermediate_number_arrays[current_index],
+                                 list_of_intermediate_number_arrays[current_index - 1])
+    else:
+        stop_animation()
+
+
+def toggle_views_visibility(is_visible):
+    array_independent_views = [main_window.pushButton_start_sorting, main_window.pushButton_compare,
+                               main_window.comboBox_sorting_algorithms,
+                               main_window.pushButton_create_array, main_window.pushButton_manuel_array,
+                               main_window.pushButton_clear, main_window.lineEdit_array_size,
+                               main_window.lineEdit_max_value, main_window.lineEdit_min_value,
+                               main_window.label_array_size, main_window.label_max_value,
+                               main_window.label_min_value, main_window.lineEdit_search, main_window.pushButton_search,
+                               main_window.checkBox_seed, main_window.spinBox_seed,
+                               main_window.lineEdit_fibonacci, main_window.pushButton_fibonacci,
+                               main_window.frame_line, main_window.frame_line_2, main_window.frame_line_3,
+                               main_window.frame_line_4, main_window.frame_line_5]
+    for view in array_independent_views:
+        if is_visible:
+            view.setVisible(True)
+            view.raise_()
+        else:
+            view.setVisible(False)
+            view.lower()
+
+    pause_stop_resume_back_buttons = [main_window.pushButton_pause, main_window.pushButton_resume,
+                                      main_window.pushButton_stop, main_window.pushButton_back,
+                                      main_window.label_speed, main_window.dial_animation_speed]
+    for view in pause_stop_resume_back_buttons:
+        if is_visible:
+            view.setVisible(False)
+            view.lower()
+        else:
+            view.setVisible(True)
+            view.raise_()
+
+    main_window.update()
+
+
+def paint_different_elements(first_array, second_array):
+    different_element_indexes = []
+    if len(first_array) == len(second_array):
+        for index in range(len(first_array)):
+            if first_array[index] != second_array[index]:
+                different_element_indexes.append(index)
+    draw(second_array, highlight=True, highlighted_bar_indexes=different_element_indexes)
+
+
+def set_seed_visibility():
+    main_window.spinBox_seed.setVisible(main_window.checkBox_seed.isChecked())
+    main_window.update()
 
 
 if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_window = MainSortingWindow()
     main()
+
+    sys.exit(app.exec_())
